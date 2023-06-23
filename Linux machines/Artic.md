@@ -1,5 +1,3 @@
-**Author: Noto La Diega Alessadnro** 
-
 **Target: 10.10.10.11**
 
 # INFORMATION GAHTERING
