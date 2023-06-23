@@ -49,7 +49,7 @@ Host script results:
 
 Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 71.66 seconds```
-
+```
 Un scan su tutte le porte non evidezia nessuna nuova porta aperta, quindi ci concetriamo su queste :
 
 PORT      STATE SERVICE      VERSION
