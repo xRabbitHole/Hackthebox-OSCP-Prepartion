@@ -1,8 +1,7 @@
-Devel 
 
-** Author: Noto La Diega Alessandro **
+**Author: Noto La Diega Alessandro**
 
-** Target: 10.10.10.5 **
+**Target: 10.10.10.5**
 
 # INFORMATION GATHERING
 
