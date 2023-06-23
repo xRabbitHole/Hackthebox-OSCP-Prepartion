@@ -6,6 +6,7 @@
 
 Iniziamo con un scan base di nmap
 
+```bash
 ┌──(rot㉿kali)-[/home/kali]
 └─# [[Nmap]] -sC -sV -p- 10.10.10.68
 Starting Nmap 7.93 ( https://nmap.org ) at 2023-05-05 09:19 EDT
@@ -21,7 +22,7 @@ PORT   STATE SERVICE VERSION
 
 Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 41.76 seconds
-
+```
 # ENUMERATION
 
 Analizzando la pagina vediamo che il sito è in php e sembra rimandare a questa pagina github:
