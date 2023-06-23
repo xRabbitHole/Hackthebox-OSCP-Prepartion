@@ -5,6 +5,7 @@
 # INFORMATION GATHERING #
 
 Iniziamo con un scan base di nmap
+┌──(rot㉿kali)-[/home/kali]
 └─# [[Nmap]] -sC -sV -p- 10.10.10.68
 Starting Nmap 7.93 ( https://nmap.org ) at 2023-05-05 09:19 EDT
 Stats: 0:00:10 elapsed; 0 hosts completed (1 up), 1 undergoing SYN Stealth Scan
