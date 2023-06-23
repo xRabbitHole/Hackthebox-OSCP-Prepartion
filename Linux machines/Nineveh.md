@@ -1,5 +1,3 @@
-**Author: Noto La Diega Alessandro**
-
 **Target: 10.10.10.43**
 
 # INFORMATION GATHERING
