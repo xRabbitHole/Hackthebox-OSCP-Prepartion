@@ -7,7 +7,7 @@
 iniziamo con un semplice scan di [[Nmap]]
 
 ```bash
-iniziamo con un semplcie scan di [[Nmap]]
+
 ┌──(root㉿kali)-[/home/kali/htb/blue]
 └─# nmap -sC -sV 10.10.10.40
 Starting Nmap 7.93 ( https://nmap.org ) at 2023-05-28 17:14 EDT
