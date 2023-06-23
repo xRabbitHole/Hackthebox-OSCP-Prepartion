@@ -1,8 +1,3 @@
----
-cover: ../.gitbook/assets/capture.png
-coverY: 57
----
-
 # Active
 
 **Target: 10.10.10.100**
