@@ -6,7 +6,8 @@
 
 Per prima cosa lanciamo un rapido scan con [[Nmap]]
 ```bash
-┌──(root㉿kali)-[/home/kali/htb/friendzone]                                      └─# nmap -sC -sV -O -min-rate=5000 10.10.10.123                                  
+┌──(root㉿kali)-[/home/kali/htb/friendzone]                                      
+└─# nmap -sC -sV -O -min-rate=5000 10.10.10.123                                  
 Starting Nmap 7.93 ( https://nmap.org ) at 2023-06-06 14:13 EDT                                                     
 Nmap scan report for 10.10.10.123                                               
 
