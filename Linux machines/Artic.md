@@ -49,7 +49,7 @@ L'elaborazione della richiesta ci mette 30 sec difficile enumerazione con script
 
 Cliccando sulla cartella administrator veniamo reindirizzati ad una pagina di login di AdobeCouldfuison 8
 
-![[1*-Ym437MPB5fWWHtqgKnmaw.webp]]
+![imag1](../zzz_rev/attachments/1*-Ym437MPB5fWWHtqgKnmaw.webp)
 
 Cerchiamo con searchsploit
 ```bash
