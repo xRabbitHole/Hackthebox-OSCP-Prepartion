@@ -45,7 +45,7 @@ cfdocs/              dir   03/22/17 08:55 μμ
 
 L'elaborazione della richiesta ci mette 30 sec difficile enumerazione con script automatici
 
-![[1*z6PpwH4sApbhWYCqYsiPIQ.webp]]
+![[../../zzz_rev/attachments/1*z6PpwH4sApbhWYCqYsiPIQ.webp]]
 
 Cliccando sulla cartella administrator veniamo reindirizzati ad una pagina di login di AdobeCouldfuison 8
 
