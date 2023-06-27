@@ -115,6 +115,8 @@ Session completed.
 
 Ci loggiamo con admin:happyday e siamo dentro 
 
+![image4](../zzz_rev/attachments/artic4.png)
+
 >NOTA: APPROFONDIRE PASS THE HASH
 
 ## METODO CON AUTENFICAZIONE ADMIN
@@ -133,6 +135,8 @@ Ci spostiamo nella sezione "DEBUGGING & LOGGING > ADD/EDIT SCHEDULED TASK
 e aggiungiamo un nuovo schedule
 
 ![imag3](../zzz_rev/attachments/1*HqvdBk09BVtq1448nzEWFA.webp)
+
+![imag4](../zzz_rev/attachments/artic5.png)
 
 alla voce Url mettiamo il nostro ip
 http://10.10.14.53:80/shell.jsp
