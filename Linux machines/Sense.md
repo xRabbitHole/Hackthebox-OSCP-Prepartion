@@ -2,7 +2,7 @@
 
 # INFORMATION GAHTERING
 
-Prima di tutto faccio un rapido scan con [Nmap](../../Note/Tool/Nmap.md)per identificare quali porte sono aperte e quali servizi girano 
+Prima di tutto faccio un rapido scan con [Nmap](../../Note/Tool/Nmap.md) per identificare quali porte sono aperte e quali servizi girano 
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/sense]
@@ -96,7 +96,7 @@ Progress: 26549 / 26585 (99.86%)
 ```
 
 Abbiamo diverse directory esposte ma non ho trovato nulla di utile.
->Nota visitando /installer abbiamo la modica del'url in 
+>Nota visitando /installer abbiamo la modifica del'url in 
 >`https://10.10.10.60/installer/installer.php`
 >ci puo suggerire la presenza di file .php che possiamo cercare dopo sempre con gobuster
 
