@@ -1,10 +1,8 @@
-**Author: Noto La Diega Alessadnro** 
-
 **Target: 10.10.10.60**
 
 # INFORMATION GAHTERING
 
-Prima di tutto faccio un rapido scan con [Nmap](../../Note/Tool/Nmap.md)]per identificare quali porte sono aperte e quali servizi girano 
+Prima di tutto faccio un rapido scan con [Nmap](../../Note/Tool/Nmap.md)per identificare quali porte sono aperte e quali servizi girano 
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/sense]
