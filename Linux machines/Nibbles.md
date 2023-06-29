@@ -50,12 +50,15 @@ Troviamo 2 porte aperte
 # ENUMERATION
 
 Visitano la la porta 80 ci troviamo difrotne ad un pagina bianca con scritto solo 
-#"Hello world!" porviamo ad ispezionare il codice sorgente
+#"Hello world!"
 
 ![](../zzz_rev/attachments/nibble.png)
 
-<b>Hello world!</b>
+porviamo ad ispezionare il codice sorgente
+
 ```htlm
+<b>Hello world!</b>
+
 <!-- /nibbleblog/ directory. Nothing interesting here! -->
 ```
 
