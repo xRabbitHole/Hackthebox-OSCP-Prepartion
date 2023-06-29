@@ -49,6 +49,8 @@ Un ulteriore scan su tutte le porte non ci fornisce nessuna nuovo indizio
 
 Visitano  http://10.10.10.13:80 ci ritroviamo di fornte alla pagine di defult di un server apache2 
 Guardando il codice sorgente della pagina troviamo questi riferimenti:
+
+![](../zzz_rev/attachments/cronos1.png)
  
 Modified from the Debian original for Ubuntu
 Last updated: 2014-03-19
