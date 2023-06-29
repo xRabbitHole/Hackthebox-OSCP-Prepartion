@@ -52,12 +52,13 @@ Guardando il codice sorgente della pagina troviamo questi riferimenti:
 
 ![](../zzz_rev/attachments/cronos1.png)
  
+```
 Modified from the Debian original for Ubuntu
 Last updated: 2014-03-19
 See: https://launchpad.net/bugs/1288690
   
 https://lists.debian.org/debian-apache/2014/03/msg00023.html
-
+```
 Si parla di una modifica da Debian ad Ubuntu 
 
 Notiamo anche la porta 53 aperta che insiema alla pagina di defult di Apache2 potrebbe indicare il fatto
