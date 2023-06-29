@@ -249,28 +249,28 @@ sudo apt-get install evolution
 
 Una volta istallato lo apriamo e seguiamo le istruzione della modalità benvenuto 
 
-![[../zzz_rev/attachments/1*8cfk_zqsdwrVajKlxbmlQg.webp]]
+![](../zzz_rev/attachments/1*8cfk_zqsdwrVajKlxbmlQg.webp)
 
 Inseriamo il nome orestis nel campo Nome completo e orestis@brainfuck.htb nel campo Indirizzo e-mail.
 
-![[../zzz_rev/attachments/1*LWH8GoJ6cC1D_pbc9xuB-g.webp]]
+![](../zzz_rev/attachments/1*LWH8GoJ6cC1D_pbc9xuB-g.webp)
 
 Nella finestra Ricezione email, aggiungiamo brainfuck.htb come Server, 143 come Porta e orestis come Nome utente.
 
 Nella finestra Invio e-mail, aggiungiamo brainfuck.htb come Server, 25 come Porta e Nessuna crittografia come Metodo di crittografia.
 
-![[../zzz_rev/attachments/1*O7O_-dNp-671U28OoVGYoA.webp]]
+![](../zzz_rev/attachments/1*O7O_-dNp-671U28OoVGYoA.webp)
 Ci verra richiesta password di autenticazione. Inseriamo kHGuERB29DNiNE e facciamo clic su OK. Ora possiamo vedere la posta di Orestis!
 
 Nella posta troviamo questo messaggio 
 
-![[../zzz_rev/attachments/1*q7VcbUijHJjh9z2Wt9VKVA.webp]]
+![](../zzz_rev/attachments/1*q7VcbUijHJjh9z2Wt9VKVA.webp)
 
 Nella fase di enumerazione avevamo tre nomi host che abbiamo aggiunto al nostro file hosts. Poiché l'e-mail menziona un forum "segreto", diamo un'occhiata al sito Web sup3rs3cr3t.brainfuck.htb. Sul sito Web, quando facciamo  clic su Accedi, ci viene presentata una pagina di accesso. Inseriamo  le nostre credenziali appena trovate.
 
 Siamo loggati come orestis!
 
-![[../zzz_rev/attachments/1*a4wJVzPvdlsjwy6G5U10eQ.webp]]
+![](../zzz_rev/attachments/1*a4wJVzPvdlsjwy6G5U10eQ.webp)
 
 Facciamo clic sul thread di accesso SSH.
 
