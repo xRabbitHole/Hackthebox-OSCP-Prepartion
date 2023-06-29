@@ -111,7 +111,7 @@ Prima di passare all'enumerazione, prendiamo alcune note mentali sui risultati d
 
 Partiamo dalla porta 443
 
-![[../zzz_rev/attachments/1*GK_AbgflFen8W_kznDyfhQ.webp]]
+![](../zzz_rev/attachments/1*GK_AbgflFen8W_kznDyfhQ.webp)
 
 Ci troviamo di fronte un prompt di login, proviamo un po di credenziali di default ma non funzionano.
 
