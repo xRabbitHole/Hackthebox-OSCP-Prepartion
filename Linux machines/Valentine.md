@@ -1,5 +1,3 @@
-**Author: Noto La Diega Alessandro**
-
 **TARGET 10.10.10.79**
 
 # INFORMATION GATHERING
@@ -150,7 +148,9 @@ To do:
 ```
 
 all'interno del file hype_key sembra esserci una chiave decodificata in esamdecimale
+
 ![](../zzz_rev/attachments/Valentine2.png)
+
 possiamo decodificarla tramite questo sito:https://conv.darkbyte.ru
 
 oppure tramite il comando `xxd -r -p`
@@ -210,10 +210,13 @@ Dai risultati di gobuster avevamo altre due directory esposte :
 - /deconde
 
 ![](../zzz_rev/attachments/Valentine3.png)
+
 Sembra un app per decoficare dei dati 
 
 - /endcode
+
 ![](../zzz_rev/attachments/Velentine4.png)
+
 Sembra un app per cifrare dei dati 
 
 Queste due directory per il momento non ci portano a nulla..
