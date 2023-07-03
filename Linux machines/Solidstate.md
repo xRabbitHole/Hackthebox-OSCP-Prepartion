@@ -269,7 +269,7 @@ except:
 ```
 
 
-Dopo aver esaminato la sceneggiatura, ho preso alcune note:
+Dopo aver esaminato l'exploit, ho preso alcune note:
 1. Questo è un exploit che ha bisogno di credenziali. L'exploit utilizza le credenziali predefinite root/root che sono probabilmente fornite con il software. Dovremo connetterci al server per scoprire se queste credenziali sono valide prima di eseguire questo exploit.
 
 2. Quando eseguiamo l'exploit dobbiamo passare l'indirizzo IP come argomento. Lo script per impostazione predefinita si connette alla porta 4555, il che è positivo poiché il nostro server è in esecuzione su quella porta.
