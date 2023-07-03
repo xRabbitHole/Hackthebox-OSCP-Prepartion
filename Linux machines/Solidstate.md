@@ -333,7 +333,7 @@ user: mailadmin
 
 Abbiamo 5 account attivi, Poiché si tratta di un account amministratore, possiamo resettare la password di ogni utente e quindi accedere al tutti gli account.
 
-Vediamo come come fare 
+Vediamo come fare 
 
 ```bash
 setpassword -h
