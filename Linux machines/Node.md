@@ -632,10 +632,7 @@ See "man sudo_root" for details.
 root@node:/tmp# id
 uid=0(root) gid=1000(tom) groups=1000(tom),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),115(lpadmin),116(sambashare),1002(admin)
 root@node:/tmp#
-
-
-
-
+```
 
 # ROOT FLAG WHITOUT SHELL
 
