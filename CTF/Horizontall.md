@@ -40,7 +40,7 @@ Un ulteriore scan su tutte le porte non ci da nessuna informazione aggiuntiva.
 
 Visitano il sito sulla porta 80 ci troviamo davanti a questa pagina 
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Horizontall.png)
+![](../zzz_rev/attachments/Horizontall.png)
 nessuno dei link sembra funzionare proviamo ad enumerare eventuali directory esposte con [Gobuster](Note/Tool/Gobuster.md)
 
 ```bash
@@ -136,10 +136,10 @@ methods: {
 
 Aggiungendolo ad `etc/hosts` possiamo visitarlo e ci troviamo davanti ad una pagina di benvenuto 
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Horizontall2.png)
+![](../zzz_rev/attachments/Horizontall2.png)
 Nel file java si faceva riferimento all'endpoint `/reviews`  visitiamolo 
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Horizontall3.png)
+![](..zzz_rev/attachments/Horizontall3.png)
 
 presumo ci siano altri endpoint verifichiamo con feroxbuster
 
@@ -189,7 +189,7 @@ Abbiamo 3 endpoint
 
 Ora /reviews l'abbiamo già visto, vediamo /admin che sembrerebbe quello piu interessante
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Horizontall4.png)
+![](../zzz_rev/attachments/Horizontall4.png)
 Ci troivamo davanti una pagina di login di software di nome strapi, vediamo se searchspolit trova qualcosa che possiamo usare
 
 ```bash
@@ -286,7 +286,7 @@ Perfetto ci siamo non ci resta che modificare l'exploit inserendo l'url strapi e
 
 Ci autentichiamo con le credenziali data all'exploit e siamo dentro
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Horizontall5.png)
+![](../zzz_rev/attachments/Horizontall5.png)
 
 # GAINING AN INITIAL FOOTHOLD
 
@@ -826,7 +826,7 @@ $
 ```
 
 Visitiamo 127.0.0.1:8000
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Horizontall6.png)
+![](../zzz_rev/attachments/Horizontall6.png)
 Da quello che vediamo siamo di fronte ad una verisone di `Lavavel v8(PHPv.7.4.18)`
 
 [Searchsploit](Note/Tool/Searchsploit.md) non ci restituisce nulla vediamo se abbiamo qualcosa con google.
