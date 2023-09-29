@@ -78,27 +78,27 @@ Partiamo ad enumerare la porta 80
 
 Visitiamo la pagina web, ci troviamo di fronte ad un pagina di registrazione 
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Validator1.png)
+![](../zzz_rev/attachments/Validator1.png)
 
 Proviamo a registrare un utente,
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Validator.png)
+![](../zzz_rev/attachments/Validator.png)
 
 Vediamo che ci restituisce una pagina /account.php, il .php ci suggerisce che la webapp utilizzi php come linguaggio.
 Notiamo anche l'input inserito precedentemente viene visualizzato in /account.php
 Potrebbe suggerisci una SQLinjection
 Proviamo ad inserire il payload '-- - 
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/validatro2.png)
+![](../zzz_rev/attachments/validatro2.png)
 Non otteniamo nessun informazione.
 
 Proviamo a vedere la richiesta trammite burp.
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Validator3.png)
+![](../zzz_rev/attachments/Validator3.png)
 Vediamo che abbiamo anche il campo `country` in cui possiamo provare una SQLinjection.
 Priviamo a mettere il payload ' nel campo `country`
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Validator5.png)
+![](../zzz_rev/attachments/Validator5.png)
 
 Questa è una SQL injection di secondo ordine.
 
@@ -113,7 +113,7 @@ Un'iniezione UNION è quando aggiungo un'istruzione UNION alla query che mi cons
 SELECT username from players where country = 'Brazil' UNION SELECT 1;-- -';
 ```
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Validator6.png)
+![](../zzz_rev/attachments/Validator6.png)
 Vadiamo che la query funziona.
 Proviamo ad aggiungere il 2 per vedere se abbiamo due collonne.
 
@@ -121,24 +121,24 @@ Proviamo ad aggiungere il 2 per vedere se abbiamo due collonne.
 ' UNION select 1,2-- -
 ```
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Validator7.png)
+![](../zzz_rev/attachments/Validator7.png)
 Ci restituisce un errore, quindi possiamo ipotizzare che abbiamo 1 solo colonna.
 
 Ora che sappiamo come manipolare la query enumeriamo ulteriormente il database.
 
 Con ' UNION @@version-- - vediamo con che tipo di database abbiamo a che fare.
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Validator8.png)
+![](../zzz_rev/attachments/Validator8.png)
 Il database è MariaDB 10.5.11
 
 vediamo che utente siamo con ' UNION user( )-- -
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Validator9.png)
+![](../zzz_rev/attachments/Validator9.png)
 Siamo uhc@localhost
 Vediamo se il nostro utente ha i permessi FILE, se cosi fosse avremmo i permessi di lettura e scrittura sul server. Questo ci consentirebbe di caricare una webshell.
 
 con `' UNION SELECT super_priv FROM mysql.user-- -` vediamo se abbiamo i privilegi di admin e quindi anche i permessi FILE
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Validator10.png)
+![](../zzz_rev/attachments/Validator10.png)
 
 Ci resituisce Y che sta per yes quindi siamo admin, questo significa abbiamo i permessi per leggere scrivere sul server non ci cresta che caricare un webshell.
 
@@ -148,11 +148,11 @@ Utilizziamo
 
 come payload 
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Validator11.png)
+![](../zzz_rev/attachments/Validator11.png)
 Ci restituisce errore ma dovrebbe ever funzionato 
 Visitiamo /shll.php  e con  `?cmd=id` vediamo che abbiamo la nostra webshell
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Validator12.png)
+![](../zzz_rev/attachments/Validator12.png)
 
 Vediamo di aver una revshell più stabile.
 Ricarichiamo la pagina e la intercettiamo sempre con burp. Cambiamo metodo di richiesta da GET a POST e nel campo cmd= andiamo ad inserire la nostra revshell.
