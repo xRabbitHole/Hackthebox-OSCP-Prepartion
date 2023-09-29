@@ -64,7 +64,7 @@ Iniziamo dalla porta 80
 
 Dopo aver aggiunto pilgrimage.htb al nostro /etc/hosts procediamo a visitare il sito 
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/pilgrimage.png)
+![](../zzz_rev/attachments/pilgrimage.png)
 Quando apriamo il sito web, vedremo una pagina che ha la funzionalità per ridurre un'immagine. E una pagina di accesso e registrazione.
 
 solo per vedere cosa fa, ne abbiamo preso uno casuale e l'abbiamo ridotto. Il che ha generato un collegamento http://pilgrimage.htb/shrunk/64a29df7903fa.png, che indica che le immagini ridotte vengono salvate nel percorso /shrunk.
@@ -146,7 +146,7 @@ exploit.png  generate.py  README.md
 
 lo carichiamo sul sito 
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/pilgrimange1.png)
+![](../zzz_rev/attachments/pilgrimange1.png)
 e che lo scarichiamo tramite wget 
 
 ```bash
@@ -338,7 +338,7 @@ python3 generate.py -f "/var/db/pilgrimage" -o exploit.png
 ```
 
 Carichiamo l'immagine come prima 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/pilgrimange2.png)
+![](../zzz_rev/attachments/pilgrimange2.png)
 sempre con wget la riscarichiamo e la analizziamo con `identify`
 
 ```bash
