@@ -101,7 +101,7 @@ Vediamo un secondo dominio preprod-payroll.trick.htb. aggiungiamo anche questo a
 
 Vistiamo la pagina trick.htb
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/trick.png)
+![](../zzz_rev/attachments/trick.png)
 Ci troviamo di fronte ad un sito in costruzione.
 
 Proviamo ad enumerare con gobuster per vedere se abbiamo directory esposte.
@@ -134,7 +134,7 @@ zsh: suspended  gobuster dir -w /usr/share/dirbuster/wordlists/directory-list-2.
 Non abbiamo nulla di utile, neanche il codice sorgente della pagina ci da informazioni utili 
 passiamo all'altro nome di dominio preprod-payroll.trick.htb.
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/trick2.png)
+![](../zzz_rev/attachments/trick2.png)
 
 ci troviamo di fronte ad un prompt di login, Nonostante l'aspetto della pagina, questo è in realtà un vero software. Cercardo su Google l'intera stringa tra virgolette restituisce un gruppo di pagine reali con lo stesso titolo:
 
@@ -149,20 +149,20 @@ Proviamo a vedere a vedere se abbiamo qualche vulnerabilità nota.
 Troviamo questa  [SQL bypass authentication](https://www.exploit-db.com/exploits/50403)
 L' SQL ci dici di usare questo payload `'OR 1 = 1` 
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/trick3.png)
+![](../zzz_rev/attachments/trick3.png)
 
 Siamo dentro, enumerando un po il sito riusciamo ad trovare un password.
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/trick4.webp)
+![](../zzz_rev/attachments/trick4.webp)
 
 ### SQL injection Manual
 
 Oltre a un semplice bypass di autenticazione, cercherò di recuperare le informazioni utilizzando l'iniezione SQL. Troverò una richiesta nella cronologia di Burp in cui ho provato ad accedere con qualcosa come "admin" / "admin", fare clic con il tasto destro su quella richiesta e selezionare "Invia a ripetitore".
 
 Il miglior tipo di SQLI è quando qualcosa dal DB viene restituito alla pagina. Sfortunatamente, non ce l'ho qui. Ma posso verificare la presenza di un'iniezione booleana. Aggiornerò il mio nome utente con qualcosa che contiene un true e vedrò che il risultato è "1":
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/trick5.png)
+![](../zzz_rev/attachments/trick5.png)
 Quando imposto che 1=1 su qualcosa di falso, il risultato è diverso:
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/trick6.png)
+![](../zzz_rev/attachments/trick6.png)
 Ciò significa che posso inserire query più complicate al posto di 1=1 e ottenere risposte sì/no.
 
 ### Identify Injection in sqlmap
@@ -499,7 +499,7 @@ Aggiungiamo all fine etc/hosts
 ### LFI come michael
 
 Visitiamo il sottodominio, 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/trick7.png)
+![](../zzz_rev/attachments/trick7.png)
 
 Ci sono alcune altre pagine ("Servizi", "Informazioni", "Contatti"), ma anche il loro contenuto è spazzatura. Tuttavia, lo schema dell'URL è interessante. Facendo clic sul collegamento "Servizi" si accede a http://preprod-marketing.trick.htb/index.php?page=contact.html. È comune sui siti PHP avere un index.php principale che gestisce il tema generale, le barre dei menu, ecc. e quindi include la pagina di destinazione al suo interno.
 
@@ -592,7 +592,7 @@ L'attraversamento della directory con un percorso relativo non è riuscito a cau
 
 Questo tipo di str_replace per rimuovere ../ è un modo comune e non sicuro per cercare di prevenire inclusioni di file locali / vulnerabilità di directory traversal . Il problema è che str_replace ne applica solo uno. Ciò significa che se metto un mucchio di ....// nella stringa, quando rimuove ../, rimane ../. Per esempio:
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/trick8.png)
+![](../zzz_rev/attachments/trick8.png)
 
 
 ## Shell via mail include
@@ -630,7 +630,7 @@ nei comandi usati sopra, inviamo un'e-mail al server di posta in ascolto sulla p
 helo x è un comando per aprire/"salutare" il server, mail from: dà al server il nome del mittente,
 mentre rcpt to: fornisce il nome del destinatario. data notifica al server che i seguenti dati saranno il messaggio principale della posta e il server termina i dati con <CR><LF>.<CR><LF> , che è un . tra due nuove linee. Diamo la nostra shell PHP come dati e terminiamo con un punto.
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/trick9.png)
+![](../zzz_rev/attachments/trick9.png)
 
 Funziona, abbiamo la nostra RCE
 
@@ -670,7 +670,7 @@ Proviamo a leggere la chiave RSA di micheal con LFI
 
 http://preprod-marketing.trick.htb/index.php?page=..././..././..././..././..././..././..././..././home/michael/.ssh/id_rsa
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Trick10.png)
+![](..zzz_rev/attachments/Trick10.png)
 
 non ci resta che salvare in un file di testo 
 
