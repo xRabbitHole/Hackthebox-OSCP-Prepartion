@@ -46,7 +46,7 @@ Abbiamo 3 porte aperte
 
 La porta 80 ci ritorna la pagina di default di Apache2
 
-![img](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Bank.png)
+![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Bank.png)
 Nulla di interessante, Passiamo alla porta 53.
 
 # Port 53
