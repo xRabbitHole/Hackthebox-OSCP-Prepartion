@@ -132,9 +132,9 @@ header.php restituisce un 302 a login.php, che porta il browser a /inc/login.php
 
 - `/balance-transfer ` fornisce un elenco di directory con molti file .acc, ognuno dei quali è di 32 caratteri esadecimali (MD5?):
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Bank3.png)Notiamo che hanno tutti più o meno la stessa dimensione che varia da 583 a 586 tutti tranne una che pesa 257 k come possiamo vedere nella figura sotto.
+![](../zzz_rev/attachments/Bank3.png)Notiamo che hanno tutti più o meno la stessa dimensione che varia da 583 a 586 tutti tranne una che pesa 257 k come possiamo vedere nella figura sotto.
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Bank4.png)
+![](../zzz_rev/attachments/Bank4.png)
 
 La scarichiamo, lo apriamo e troviamo quelle che sembrano della credenziali 
 ![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/bank6.png)
@@ -150,29 +150,29 @@ Password: !##HTBB4nkP4ssw0rd!##
 
 Utilizziamo le credenziali  in http://bank.htb/login.php e siamo dentro.
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Bank7.png)
+![](../zzz_rev/attachments/Bank7.png)
 
 # GAINING AN INITIAL FOOTHOLD 
 
 Nella sezione support abbiamo la possibilità di caricare dei file, visto che la web app è in php ho provato a ad inserire un file .php per testare se avevamo un RCE  ma ci dice che possiamo caricare solo immagini.
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Bank8.png)
+![](../zzz_rev/attachments/Bank8.png)
 
 modificando il nome nel file .php in .jpg riusciamo a caricarlo come da immagine
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Bank9.png)
+![](../zzz_rev/attachments/Bank9.png)
 
 ma richiamando la pagina abbiamo questo tipo di risposta
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Bank10.png)
+![](../zzz_rev/attachments/Bank10.png)
 l'estensione è corretta ma ci da comunque un errore.
 Tornando alla pagina support e ispezionando il codice sorgente troviamo questa riga 
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Bank11.png)
+![](../zzz_rev/attachments/Bank11.png)
 
 Questo riga ci dice ha bisogna mettere l'estensione .htb per permettere di eseguire il file caricato.
 
 Proviamo...
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/bank12.png)Ci siamo, abbiamo la nostra RCE non ci resta che caricare una revshell per ottenere un punto 'ingresso.
+![](../zzz_rev/attachments/bank12.png)Ci siamo, abbiamo la nostra RCE non ci resta che caricare una revshell per ottenere un punto 'ingresso.
 
 Qui abbiamo la nostra revshell.php (rinominata in .htb per bypassare le restrizioni)
 ```bash
@@ -224,15 +224,15 @@ Approfondiamo con burpsuit.
 Apriamo burp e il nostro browser per intercettare il traffico.
 Nella preferenze di burp, nella sezione "Match/Replace" impostiamo come vediamo nell'immagine.
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Bank14.png)
+![](../zzz_rev/attachments/Bank14.png)
 
 Cosi facendo ad ogni 302 Found Burp farà corrispondere automaticamente un 200 facendoci accedere all risorsa richiesta.
 
 Proviamo a visitare `/index.php`
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Bank15.png)
+![](../zzz_rev/attachments/Bank15.png)
 Perfetto riusciamo ad accedere alla risorsa. vediamo cosa ci restituisce `/support.php`
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Bank16.png)
+![](../zzz_rev/attachments/Bank16.png)
 
 A questo punto possiamo utilizzare la stessa RCE vista nella sezione precedente per aver il nostro punto d'appoggio iniziale e compromettere la macchina. 
 # PRIVESC
