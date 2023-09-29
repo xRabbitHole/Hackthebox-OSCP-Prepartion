@@ -108,39 +108,39 @@ Dove ci dice che:
 
 Tornando alla home page abbiamo un link nella parola HelpDesk che ci reindirizza alla seguente pagina 
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Delivery4.png)
+![](../zzz_rev/attachments/Delivery4.png)
 
 E' il sito dell'help desk, dove abbiamo la possibilità di aprite ticket, verificare lo stato di un ticket.
 
 Proviamo ad aprirne uno 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Delivery7.png)
+![](../zzz_rev/attachments/Delivery7.png)
 
 Una volta aperto ill ticket ci da questa risposta
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Delivery3.png)
+![](../zzz_rev/attachments/Delivery3.png)
 Notiamo una mail interessante `@delivery.htb` ne prediamo nota 
 
 Ora verifichiamo lo stato del ticket.
 
 Andiamo in check ticket Status e mettiamo i dati richiesti
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Delivery6.png)
+![](../zzz_rev/attachments/Delivery6.png)
 
 Ci fa vedere lo stato del ticket 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Delivery5.png)
+![](../zzz_rev/attachments/Delivery5.png)
 Qui non possiamo fare altro per il momento. Passiamo alla porta 8065
 
 ## PORT 8065
 
 Visitando la porta 8065 abbiamo questa pagina
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Delivery2.png)
+![](../zzz_rev/attachments/Delivery2.png)
 
 Proviamo a creare un account
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Delivert8.png)
+![](../zzz_rev/attachments/Delivert8.png)
 Ci dice di confermare l'indirizzo tramite il link inviato alla email, ma dato che è una email finta e non abbiamo accesso ad internet al l'interno del laboratori di HTB dobbiamo trovare un altra soluzione.
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Delivery9.png)
+![](../zzz_rev/attachments/Delivery9.png)
 La nota sopra suggeriva che avevo bisogno di un indirizzo email @delivery.htb per ottenere un account.
 Ho notato che quando ho creato un ticket, ha offerto la possibilità di aggiornare il ticket tramite e-mail. Posso usarlo per ricevere l'e-mail di verifica.
 
@@ -148,15 +148,15 @@ Creerò un ticket e ne otterrò l'indirizzo email. Quindi registrò  un account 
 
 Gli diamo come email quella rilasciata dal ticket aperto in precedenza
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Delivery10.png)
+![](..zzz_rev/attachments/Delivery10.png)
 
 Vediamo lo stato del ticket dove è arrivata la email di conferma e seguendo il link confermiamo la email 
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Delivery11.png)
+![](../zzz_rev/attachments/Delivery11.png)
 
 Una volta loggati abbiamo il nostro account MatterMoss
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Delivery14.png)
+![](../zzz_rev/attachments/Delivery14.png)
 Nella mail troviamo quelle che sono delle credenziali SSH 
 
 maildeliverer:Youve_G0t_Mail!
