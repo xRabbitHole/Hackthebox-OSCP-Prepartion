@@ -97,7 +97,7 @@ Abbiamo 3 porte aperte
 
 Iniziamo dalla porta 80
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Delivery.png)
+![](../zzz_rev/attachments/Delivery.png)
 Ci troviamo di fronte a questa pagina, se andiamo su contact us ci reindirizza a questa pagina.
 
 ![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Delivery1.png)
