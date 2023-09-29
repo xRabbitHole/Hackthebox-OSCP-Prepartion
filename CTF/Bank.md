@@ -81,7 +81,7 @@ Aggiungiamo i sottodomini al nostro file /etc/hosts
 ### bank.htb
 
 Visitando http://bank.htb ci troviamo davanti ad un prompt di login.
-![](.../zzz_rev/attachments/Bank1.png)
+![](../zzz_rev/attachments/Bank1.png)
 Ci chiede una  email e una password che al momento non abbiamo.
 Ho provato alcune supposizioni di base (amministratore/amministratore, banca/banca, ecc.) E alcune enumerazione SQLI di base (mettendo ' in ogni campo), ma non è emerso nulla di interessante.
 
