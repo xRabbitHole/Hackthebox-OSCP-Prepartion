@@ -39,7 +39,7 @@ Partiamo dalla porta 80
 
 Visitando il sito web otteniamo la pagina di default di apache2
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/openadmin.png)Quindi passiamo ad una prima enumerazione di eventuali directory esposte con gobuster
+![](../zzz_rev/attachments/openadmin.png)Quindi passiamo ad una prima enumerazione di eventuali directory esposte con gobuster
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/openadmin]
@@ -74,10 +74,10 @@ Abbiamo 3 directory :
 
 Visitiamo `/music`
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/openadmin1.png)
+![](../zzz_rev/attachments/openadmin1.png)
 E' un sito dove si puo ascoltare musica, il link al `login` ci rimanda ad una pagina `/ona` dove ci sono diverse informazioni interessanti 
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/openadmin2.png)
+![](../zzz_rev/attachments/openadmin2.png)
 Possiamo vedere una versione `18.1.1`  e un DNS Domain `openadmin.htb` (aggiungiamolo al nostro `etc/hosts`)
 
 Facendo una rapida ricerca su google troviamo subito questa [RCE](https://github.com/amriunix/ona-rce)
@@ -440,7 +440,7 @@ Session completed.
 
 o a  [carcksation.net](https://crackstation.net) che forzerà l'hash come da immagine
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/openadmin3.png)
+![](../zzz_rev/attachments/openadmin3.png)
 bene abbiamo la nostra password
 jimmy:Revealed
 
@@ -486,10 +486,10 @@ jimmy@openadmin:~$
 
 ed eccoci al sito interno,
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/openadmin4.png)
+![](../zzz_rev/attachments/openadmin4.png)
 Mettiamo le credenziali, e siamo dentro.
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/openadmin5.png)
+![](../zzz_rev/attachments/openadmin5.png)
 
 ci troviamo nella pagina `main.php` e a quella che sembra una chiava privata RSA. 
 
@@ -683,7 +683,7 @@ ci ritroviamo dentro nano
 
 digitando `^R` e poi `^X`  ci nano ci da un prompt dove possiamo eseguire dei comandi 
 e scriviamo quello che che dice GTFBINS `reset; sh 1>&0 2>&0`
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/openadmin6.png)
+![](../zzz_rev/attachments/openadmin6.png)
 diamo invio ed un clear ed abbiamo un la nostra shell con i privilegi da root.
 
 ```bash
