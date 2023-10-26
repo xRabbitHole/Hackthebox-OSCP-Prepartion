@@ -30,7 +30,7 @@ la porta 21 me la segnala come chiusa ma non so perche me la mostra
 
 Visitiamo il sito 
 
-![](../../Hackthebox-OSCP-Prepartion/zzz_rev/attachments/blunder.png)
+![](../Hackthebox-OSCP-Prepartion/zzz_rev/attachments/blunder.png)
 Ci troviamo difronte a quello che sembra essere un blog. Scorrendo fino in fondo vediamo la scritta Powered byEgotisticalSW 
 
 Cercando su google non troviamo nella di utile.
