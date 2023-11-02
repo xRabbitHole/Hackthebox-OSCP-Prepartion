@@ -47,7 +47,7 @@ Uno ulteriore scan su tutte le porte non ci da nessuna nuova informazione.
 # Port 80/443
 
 Iniziamo a visitare `10.10.11.143:80` 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/paper.png)
+![]../zzz_rev/attachments/paper.png)
 Entrambi i siti HTTP e HTTPS mostrano solo una pagina Apache CentOs predefinita:
 
 Sorprendentemente, la pagina predefinita non viene caricata come index.html su nessuna delle porte. Una nota interessante è che la pagina predefinita ritorna con una risposta HTTP 403 Forbidden (e non 200 OK). Non sono sicuro che significhi qualcosa, ma è interessante.
@@ -72,12 +72,12 @@ Aggiungiamolo al nostro `/etc/hosts`
 # paper.office:80
 
 Visitiamo `http://office.paper`
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/paper1.png)
+![](../zzz_rev/attachments/paper1.png)
 
 Si tratta chiaramente di un'opera teatrale sull'azienda tratta dallo show televisivo "The Office", incentrato su un'azienda cartaria chiamata Dunder Mifflin.
 
 Ci sono tre post, tutti di Prisonmike, e tutti con un personaggio simile allo stupido capo dello show televisivo. C'è un commento su uno dei post che contiene un suggerimento:
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/paper2.webp)
+![](../zzz_rev/attachments/paper2.webp)
 Mi assicurerò di controllare le bozze dei post se riesco a trovare l'accesso.
 
 Esplorando un po il sito vediamo che realizzato in WordPress, potrebbe essere una buona idea utilizzare [Wpscn](Note/Tool/Wpscn.md) per analizzare eventuali vulnerabilità note sia nella versione che eventualmente nei plugin installati.
@@ -221,18 +221,18 @@ In this case, simply reversing the order of the returned elements suffices and `
 ```
 
 Dobbiamo aggiungere al link `?static=1` e riusciamo a visualizzare il post segreto 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/paper3.png)
+![](../zzz_rev/attachments/paper3.png)
 si fa riferimento ad un sistema di chat per dipendenti al seguente url `http://chat.office.paper/register/8qozr226AhkCHZdyY`
 
 come possiamo vedere del url abbiamo un sottodominio `caht.office.paper` che andremo ad aggiungere al nostro `/etc/hosts` prima di visitarlo 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/paper4.png)
+![](../zzz_rev/attachments/paper4.png)
 Abbiamo un form di registrazione di `rocket.chat`
 ci registriamo e siamo dentro 
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/paper5.webp)
+![](../zzz_rev/attachments/paper5.webp)
 
 Il canale `#general` ha un sacco di personaggi dello show televisivo e alcune belle battute, ma anche qualcosa su Dwight che programma un bot:
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/paper6.webp)
+![](../zzz_rev/attachments/paper6.webp)
 
 I punti più interessanti:
 
@@ -240,16 +240,16 @@ recyclops help mostrerà i comandi
 recyclops può ottenere file ed elencare file
 questo canale è di sola lettura
 recyclops può essere raggiunto tramite DM (messaggio diretto).
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/paper7.png)
+![](../zzz_rev/attachments/paper7.png)
 Vediamo se possiamo muoverci tra le directory
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/paper8.png)
+![](../zzz_rev/attachments/paper8.png)
 Ok possiamo muoverci tra le directory 
 vedo anche un user.txt ma mi da accesso negato.
 
 Cercando su google rocket.chat bot troviamo [questa pagina](https://github.com/RocketChat/hubot-rocketchat) dove vediamo che il file di configurazione del  bot e nel file  `.env` vediamo se lo troviamo 
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/paper9.png)
+![](../zzz_rev/attachments/paper9.png)
 
 Ed eccolo qui al percorso `../hubot/.env` abbiamo un 
 user `recyclops` 
@@ -257,7 +257,7 @@ e una password `Queenofblad3s!23`
 
 leggendo il file `etc/passwd` vediamo che `dwight`  è un utente normale con una directory home diversa da rocketchat
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/paper10.png)Dato l'accesso ai file in /home/dwight, è logico che il bot venga eseguito come dwight. 
+![](../zzz_rev/attachments/paper10.png)Dato l'accesso ai file in /home/dwight, è logico che il bot venga eseguito come dwight. 
 perchiò proviamo ad accervi trammite ssh
 
 ```bash
