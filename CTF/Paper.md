@@ -47,7 +47,7 @@ Uno ulteriore scan su tutte le porte non ci da nessuna nuova informazione.
 # Port 80/443
 
 Iniziamo a visitare `10.10.11.143:80` 
-![]../zzz_rev/attachments/paper.png)
+![](../zzz_rev/attachments/paper.png)
 Entrambi i siti HTTP e HTTPS mostrano solo una pagina Apache CentOs predefinita:
 
 Sorprendentemente, la pagina predefinita non viene caricata come index.html su nessuna delle porte. Una nota interessante è che la pagina predefinita ritorna con una risposta HTTP 403 Forbidden (e non 200 OK). Non sono sicuro che significhi qualcosa, ma è interessante.
