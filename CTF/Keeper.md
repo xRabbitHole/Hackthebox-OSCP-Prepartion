@@ -37,12 +37,12 @@ Abbiamo solo 2 porte aperte
 ## Port 80
 
 Iniziamo visitando http://10.10.11.227:80
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Keeper.png)
+![](../zzz_rev/attachments/Keeper.png)
 Ci rimanda alla pagina http://tickets.keeper.htb/rt/ per l'apertura di un ticket di supporto IT
 
 Per prima cosa aggiungiamo `tickets.keeper.htb` al nostro `etc/hosts` visto che abbiamo trovato quello che sembra essere un VHOST
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/keeper1.png)Visitando http://tickets.keeper.htb/rt/ siamo di fronte ad un prompt di login 
+![](../zzz_rev/attachments/keeper1.png)Visitando http://tickets.keeper.htb/rt/ siamo di fronte ad un prompt di login 
 e vediamo che il software si chiamo RT 4.4.4+dfsg-2ubuntu1 
 
 Cercando su google per  le credenziali di default troviamo [questa](https://rt-wiki.bestpractical.com/wiki/RecoverRootPassword#:~:text=The%20topic%20of%20recovering%20root,of%20your%20Unix%20root%20user.) pagina dove vediamo che le credenziali sono 
@@ -51,10 +51,10 @@ Cercando su google per  le credenziali di default troviamo [questa](https://rt-w
 - password
 
 le proviamo e siamo dentro 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/keeper2.png)
+![](../zzz_rev/attachments/keeper2.png)
 Guardando nel tab Admin alla sezione User troviamo oltre all'utente root anche l'utente  lnorgaard
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/keeper3.png)Se apriamo lnorgaard troviamo quelle che sembrano delle credenziali 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/keeper4.png)Ora abbiamo delle credenziali complete 
+![](../zzz_rev/attachments/keeper3.png)Se apriamo lnorgaard troviamo quelle che sembrano delle credenziali 
+![](../zzz_rev/attachments/keeper4.png)Ora abbiamo delle credenziali complete 
 user:  lnorgaard
 passwd: Welcome2023!
 
@@ -133,11 +133,11 @@ più risultati ci ridanno la parola  `Rødgrød Med Fløde` che sia la password?
 Apriamo keepass2 sulla nostra macchina e proviamo a legger il file `passcodes.kdbx`
 >[!nota] Se non abbiamo keepass2 lo installiamo con il comando `sudo apt install keepass2`
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/keeper5.png)
+![](../zzz_rev/attachments/keeper5.png)
 e digitiamo `rødgrød med fløde` ( la passowrd è con le iniziali minuscole)
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/keeper6.png)Abbiamo due file. Quello interessante è il primo `keepr.htb` aperto da root che sembra contenere una chiava id_rsa
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/keeper7.png)
+![](../zzz_rev/attachments/keeper6.png)Abbiamo due file. Quello interessante è il primo `keepr.htb` aperto da root che sembra contenere una chiava id_rsa
+![](../zzz_rev/attachments/keeper7.png)
 Notiamo che queste non sono nel solito formato ma sono nel formato PuttY
 
 Cerando sempre su google come conetterci in ssh con credenziali Putty trovo [questa](https://askubuntu.com/questions/818929/login-ssh-with-ppk-file-on-ubuntu-terminal?source=post_page-----89d93fbff84b--------------------------------) discussione 
