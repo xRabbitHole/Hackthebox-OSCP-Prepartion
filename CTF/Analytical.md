@@ -73,7 +73,7 @@ Progress: 600 / 4990 (12.02%)^C
 Ho provato ad accedere col credenziali standard come admim:admin, ecc.. e anche l'indirizzo email trovato in precedenza ma non ho ottenuto nessun accesso.
 
 Notiamo che il software si chiama Metabase cerchiamo su google se troviamo qualcosa 
-Ho trovato [questa](https://github.com/m3m0o/metabase-pre-auth-rce-poc)repo su git hub dove si fa riferimento alla  CVE-2023-38646 Metabase Pre-Auth RCE 
+Ho trovato [questa](https://github.com/m3m0o/metabase-pre-auth-rce-poc) repo su git hub dove si fa riferimento alla  CVE-2023-38646 Metabase Pre-Auth RCE 
 
 Scarichiamo e vediamo se funziona.
 
