@@ -161,7 +161,7 @@ _=/usr/bin/env
 501f3d513028:/$
 ```
 
-possiamo vedere che che abbiamo un nome utente `metalytics` e una password `An4lytics_ds20223#
+possiamo vedere che che abbiamo un nome utente `metalytics` e una password `An4lytics_ds20223#`
 Usiamole per collegarci tramite ssh
 
 ```bash
