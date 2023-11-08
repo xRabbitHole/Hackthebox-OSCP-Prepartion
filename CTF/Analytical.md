@@ -36,12 +36,12 @@ uno scan completo su tutte le porte non ci da nessuna nuova informazione.
 # Port 80
 
 Visitiamo `10.10.11.233` 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/analytican.png)
+![](../zzz_rev/attachments/analytican.png)
 notiamo subito il nome `analytical.htb` che aggiungiamo al nostro `etc/hosts`
 alla sezione `Contact` troviamo un email : demo@analytical.htb potrebbe essere utile.
 
 Alla sezione login veniamo reindirizzati al seguente pagine 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/analytical1.png)
+![](../zzz_rev/attachments/analytical1.png)
 Notiamo l'indirizzo `data.analytical.htb` abbiamo un subdomino, possiamo verificalo anche con gobuster
 ```bash
 
@@ -83,7 +83,7 @@ Dalla info nel README.md  vediamo che lo script python a bisogno di 3 parametri
 - -c = command
 
 il setup token  può essere ottenuto tramite l'endpoint /api/session/properties. 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/analytical3.htb.png)
+![](../zzz_rev/attachments/analytical3.htb.png)
 
 come comando mettiamo la seguente revshell
 ```bash
