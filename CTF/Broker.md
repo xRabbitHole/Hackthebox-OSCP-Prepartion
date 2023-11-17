@@ -192,12 +192,12 @@ Data la versione recente di ssh sulla porta 22 avrò bisogno di credenziali vali
 ## Port 80
 
 Visitamo`10.10.11.243` 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/broker.png)
+![](../zzz_rev/attachments/broker.png)
 Ci chiede username e password proviamo con alcuni combinazioni standard 
 `admin:admin` funziona!
 Veniamo indirizzati endpoint http://10.10.11.243/index.html
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/broker3.png)
+![](../zzz_rev/attachments/broker3.png)
 
 **ActiveMQ** è un [message-oriented middleware](https://it.wikipedia.org/wiki/Message-oriented_middleware "Message-oriented middleware") (detto anche [broker di messaggistica](https://it.wikipedia.org/w/index.php?title=Broker_di_messaggistica&action=edit&redlink=1 "Broker di messaggistica (la pagina non esiste)")) scritto in [Java](https://it.wikipedia.org/wiki/Java_(linguaggio_di_programmazione) "Java (linguaggio di programmazione)") che dispone di un completo client [Java Message Service](https://it.wikipedia.org/wiki/Java_Message_Service "Java Message Service") (JMS). Implementa diversi protocolli di message queue:
 
@@ -209,10 +209,10 @@ Veniamo indirizzati endpoint http://10.10.11.243/index.html
 abbiamo due link
 Il pirmo link ci rimanda ad `/admin`
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/broker1.png)
+![](../zzz_rev/attachments/broker1.png)
 Mentre il secondo link ci rimanda a `/demo` dove possiamo vedere la verisone di Jetty 9.4.39 v20210325 trovata anche da nmap.
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/broker2.png)ho provato a cercare con searchsploit se abbiamo qualche vulnerabiltà nota per `jetty 9.4.39` e `ActiveMQ`  ma non ho trovato niente...passiamo alla ricerca su google.
+![](../zzz_rev/attachments/broker2.png)ho provato a cercare con searchsploit se abbiamo qualche vulnerabiltà nota per `jetty 9.4.39` e `ActiveMQ`  ma non ho trovato niente...passiamo alla ricerca su google.
 
 # GAINING AN INITIAL FOOTHOLD 
 
