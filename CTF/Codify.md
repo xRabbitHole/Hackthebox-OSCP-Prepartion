@@ -43,7 +43,7 @@ Un ulteriore scan su tutte le porte non ci da nessuna nuova informazione.
 
 Per prima cosa visto che nmap ci dice che non è stato in grado di eseguire il redirect a `http://codify.htb` lo aggiungiamo al nostro `etc/hosts`
 
-![](../Hackthebox-OSCP-Prepartion/zzz_rev/attachments/codify.png)Ci troviamo di fronte ad una web app per testare codice Node.js  dove abbiamo 3 pagine princiali
+![](../zzz_rev/attachments/codify.png)Ci troviamo di fronte ad una web app per testare codice Node.js  dove abbiamo 3 pagine princiali
 
 - About us 
 - Editor
@@ -52,7 +52,7 @@ Per prima cosa visto che nmap ci dice che non è stato in grado di eseguire il r
 
 Alla pagina `Editor` possiamo inserire il nostro codice Node.js
 
-![](../Hackthebox-OSCP-Prepartion/zzz_rev/attachments/codify2.png)
+![](../zzz_rev/attachments/codify2.png)
 
 In `Limitations` Abbiamo delle restrizione nell'utilizzo di alcuni moduli
 
@@ -71,12 +71,12 @@ per evitare di eseguire comandi di sistema e in più ci dice che È possibile im
 - os
 - zib
 
-![](../Hackthebox-OSCP-Prepartion/zzz_rev/attachments/codify1.png)
+![](../zzz_rev/attachments/codify1.png)
 
 La pagina `About Us` indica che, sebbene Codify esegua il codice sandbox, non è completamente a prova di proiettile.
 e utilizza la libreria [vm2](https://github.com/patriksimek/vm2/releases/tag/3.9.16) 
 
-![](../Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Codify3.png)
+![](../zzz_rev/attachments/Codify3.png)
 
 # GAINING AN INITIAL FOOTHOLD 
 
@@ -115,7 +115,7 @@ try {
 console.log(vm.run(code));
 ```
 
-![](../Hackthebox-OSCP-Prepartion/zzz_rev/attachments/codify4.png)
+![](../zzz_rev/attachments/codify4.png)
 
 Perfetto siamo in grado di eseguire comandi fuori dalla sendbox e quindi direttamente sul host
 Ora utilizzando il comando `id` sappiamo che stiamo eseguendo come utenti svc l'idea è quella di aggiungere la mia chiave pubblica SSH su ~/.ssh/authorized_keys e ottenere l'accesso alla shell come utente corrente, che era svc.
@@ -147,7 +147,7 @@ try {
 console.log(vm.run(code));
 ```
 
-![](../Hackthebox-OSCP-Prepartion/zzz_rev/attachments/codify5.png)
+![](../zzz_rev/attachments/codify5.png)
 
 Non ci resta che collegarci in ssh 
 
