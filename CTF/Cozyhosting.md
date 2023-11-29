@@ -45,7 +45,7 @@ Dalla scansione di nmap vediamo che non riusciamo a seguire il redirect all'indi
 ```
 
 adesso visitiamo la pagina web
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/cozy.png)
+![](../zzz_rev/attachments/cozy.png)
 alla pagina `/login` abbiamo un form di login e il riamando `BotstrapMade` ma nulla di interessante.
 passiamo l'enumerazione con [Gobuster](Note/Tool/Gobuster.md)
 
@@ -78,29 +78,29 @@ by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
 
 la pagine `/admin` ci da un codice 400 di accesso non autorizzato e ci rimanda alla pagine di login 
 per il resto nulla di interessante se non la pagine `/errore` che andiamo a vedere.
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/cozy2.png)
+![](../zzz_rev/attachments/cozy2.png)
 
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/cozy3.png)
+![](../zzz_rev/attachments/cozy3.png)
 
 Ora sappiamo che almeno una parte del sito è Spring Boot, interessante. Cercando per Spring Boot exploit troviamo [questa](https://book.hacktricks.xyz/network-services-pentesting/pentesting-web/spring-actuators) risorsa 
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/cozy4.jpg)Stando a quanto riportato l'endpoint `/acturator` potrebbe contenere informazioni interessanti. Verifichiamo.
+![](../zzz_rev/attachments/cozy4.jpg)Stando a quanto riportato l'endpoint `/acturator` potrebbe contenere informazioni interessanti. Verifichiamo.
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/cozy5.png)Abbiamo diverse path ma quella che potrebbe fare al caso nostro è `sessions` 
+![](../zzz_rev/attachments/cozy5.png)Abbiamo diverse path ma quella che potrebbe fare al caso nostro è `sessions` 
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/cozy6%20.png)
+![](../zzz_rev/attachments/cozy6%20.png)
 Sembrerebbe un cookie di sessions per l'utente `kanderson`
 Non ci resta che andare nella pagina di login e sostituire il nostro cookie con quello trovato sperando che sia l'admin
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/cozy7.png)
+![](../zzz_rev/attachments/cozy7.png)
 E ci siamo !
 
 # # GAINING AN INITIAL FOOTHOLD 
 
 Nella Dashboard, incontriamo una funzione relativa alla configurazione delle connessioni SSH.
 
-Quando esaminiamo Burpsuite, notiamo un reindirizzamento a un'altra posizione, in particolare all'interno del messaggio di errore che menziona "Connect Time Out".![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/cozy8.png)Se lasciamo vuota la sezione "Username", osserviamo un errore relativo a un comando SSH, che indica una potenziale vulnerabilità di Command Injection in questa sezione.![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/cozy9.png)
+Quando esaminiamo Burpsuite, notiamo un reindirizzamento a un'altra posizione, in particolare all'interno del messaggio di errore che menziona "Connect Time Out".![](../zzz_rev/attachments/cozy8.png)Se lasciamo vuota la sezione "Username", osserviamo un errore relativo a un comando SSH, che indica una potenziale vulnerabilità di Command Injection in questa sezione.![](../zzz_rev/attachments/cozy9.png)
 
 Proviamo una Command Injection, utilizzando questo payload ed lo encodiamo in URL
 ```bash
@@ -129,7 +129,7 @@ modifichiamo il payload
 
 Inviamo questo payload sempre nel parametro username ma prima lo codifichiamo in URL, possiamo farlo in tramite [Urlencode](https://www.urlencoder.org) che tramite burp stesso 
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/cozy12.webp)
+![](../zzz_rev/attachments/cozy12.webp)
 Eseguiamo e abbiamo la nostra shell
 
 ```shell-session
@@ -192,7 +192,7 @@ e apriamolo con `jd-gui`
 
 Dentro troviamo quelle che sono le credenziali di accesso database PostgreSQL utilizzando questi nome utente e password.
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/cozy13.png)
+![](../zzz_rev/attachments/cozy13.png)
 
 Credenziali psql
 postgres:Vg&nvzAQ7XxR
