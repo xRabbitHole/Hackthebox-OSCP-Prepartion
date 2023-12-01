@@ -67,7 +67,7 @@ la porta 80 e la 8338 risultano filtrate
 
 Visitiamo `10.10.11.224:55555`
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/sau.png)
+![](../zzz_rev/attachments/sau.png)
 Possiamo esplorare un po' lo strumento e capire che si tratta di un tipico contenitore di richieste, in cui crea un nuovo carrello e ti fornisce un token che puoi utilizzare per accedere al carrello in un secondo momento. Possiamo inoltre inviare richieste al nostro carrello e vedere anche i dati che arrivano, ma da esso non può essere generato alcun attacco particolare.
 Non esiste nemmeno un pannello di amministrazione a cui possiamo provare ad accedere. Quindi, la prossima cosa che possiamo cercare è una vulnerabilità divulgata pubblicamente in questa applicazione che possiamo sfruttare.
 
@@ -91,7 +91,7 @@ Proof-of-Concept of SSRF on Request-Baskets (CVE-2023-27163) || More info at htt
 
 Ora possiamo andare al carello appena creato
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/sau1.png)
+![](../zzz_rev/attachments/sau1.png)
 Sembra che qualche altra applicazione chiamata Maltrail sia in esecuzione.
 Sappiamo anche che la sua versione v0.53 è in esecuzione sul server.
 
