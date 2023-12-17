@@ -37,10 +37,10 @@ uno scan su tutte le porte non ci fornice nessuna nuova porta, quindi abbiamo:
 # ENUMERATION
 
 Visitiamo la `http:10.10.10.95:8080` 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/tomcat.png)
+![](../zzz_rev/attachments/tomcat.png)
 
 se andiamo ad `Manager App` ci chiede nelle credenziali di login 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/tomcat1.png)
+![](../zzz_rev/attachments/tomcat1.png)
 
 Dobbiamo trovare le credenziali  possiamo utilizzare [Hydra](Note/Tool/Hydra.md), e utilizziamo SecList come wordilist dove c'è un lista di credenziali tomcat
 
@@ -59,7 +59,7 @@ Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2023-12-16 23:06:
 ```
 
 e finalmente possiamo accedere 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/tomcat2.png)
+![](../zzz_rev/attachments/tomcat2.png)
 
 L'interfaccia web di gestione ci offre un posto dove caricare i file WAR e un modo per eseguirli manualmente. 
 I file WAR  è un archivio utilizzato in java, vediamo se può essere il nostro vettore d'attacco
@@ -84,7 +84,7 @@ listening on [any] 4321 ..
 ```
 
 lo carichiamo sul server Apache
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/tomcat3.png) 
+![](../zzz_rev/attachments/tomcat3.png) 
 e visitamo `http://10.10.10.95:8080/shell` ottenendo cosi la nostra shell
 
 ```shell-session
@@ -207,7 +207,7 @@ Do you trust the above certificate? (Y/T/N) Y
 Password:
 ```
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/tomcat4.png)e ci siamo 
+![](../zzz_rev/attachments/tomcat4.png)e ci siamo 
 
 Il prossimo passo è imporatare [Mimikatz](Note/Tool/Mimikatz.md) ed estrarre gli hash 
 ci copiamo mimikatz.exe nella nostra directory e attiviamo un server python
@@ -224,7 +224,7 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 
 ora da ci apriamo un PowerShell e importiamo mimikatz sulla macchina target
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/tomcat5.png)
+![](../zzz_rev/attachments/tomcat5.png)
 
 ci apriamo una console cmd da Administrator ed eseguiamo mimikazt
 ed eseguiamo quanto segue 
@@ -244,7 +244,7 @@ nello specifico :
 
 questo ci permetterà di estrarre gli hash dal SAM
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/tomcat6.png)
+![](../zzz_rev/attachments/tomcat6.png)
 
 che possiamo andare a rompere con [[hashcat]] o [hashes.com](https://hashes.com/en/decrypt/hash) trovando cosi la nostra password
 
