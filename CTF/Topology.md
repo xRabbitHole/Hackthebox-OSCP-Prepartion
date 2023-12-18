@@ -50,23 +50,23 @@ Partiamo dalla porta 80
 # ENUMERATION
 
 Visitiamo la pagina web
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/topology.png)
+![](../zzz_rev/attachments/topology.png)
 Sembra essere il sito di un università esploriamo un po e vediamo cosa troviamo.
 abbiamo solo un link ad LaTeX Equation Generator che non ci porta da nessuna parte
 
 Analizzando il codice sorgente della pagina troviamo un riferimento ad un sottodomino `latex.topology.htb/equation.php` a cui sembra puntare il link di prima 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/topology1.png)
+![](../zzz_rev/attachments/topology1.png)
 Aggiungiamo `latex.topology.htb` al nostro `etc/hosts` e andiamo a vedere di cosa si tratta
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/topology2.png)
+![](../zzz_rev/attachments/topology2.png)
 sembra un applicazione in php per generare un file .PNG.
 Vediamo se il codice sorgente ci può ancora dare un mano. 
 
 Troviamo un riferimento ad una directory `/demo` 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/topology3.png)
+![](../zzz_rev/attachments/topology3.png)
 
 se andiamo alla radice abbiamo un po di file
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/topology4.png)
+![](../zzz_rev/attachments/topology4.png)
 
 Tra i file troviamo due file `TeX`, tipicamente utilizzati da LaTeX e contenenti il ​​codice sorgente per la creazione di documenti utilizzando il sistema di composizione LaTeX. I file .tex servono come input per il file Compilatore LaTeX, che elabora il codice e produce un documento formattato come output.
 Per prima cosa diamo un'occhiata al file equazionetest.tex, poiché sospettiamo che possa rivelare informazioni su come funziona l'effettivo script.php. Il file recita:
@@ -101,7 +101,7 @@ Leggendo la [documentazione](https://ctan.kako-dev.de/macros/latex/contrib/listi
 \lstinputlisting{/etc/passwd}
 ```
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/topology5.png)
+![](../zzz_rev/attachments/topology5.png)
 Dopo aver inviato il payload, riceviamo un errore che indica che non è stato possibile generare l'immagine.
 Ricordiamo che il sito menziona una certa modalità matematica in linea e che sono supportate solo le battute di una riga. Ricercando quella modalità specifica, apprendiamo che è delimitata da \( e \) o da
 caratteri $.
@@ -110,7 +110,7 @@ Proviamo quindi il seguente payload:
 $\lstinputlisting{/etc/passwd}$
 ```
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/topology6.png)
+![](../zzz_rev/attachments/topology6.png)
 Bingo abbiamo una [Local File Inclusion LFI](Note/Local%20File%20Inclusion%20LFI.md)
 
 # GAINING AN INITIAL FOOTHOLD 
@@ -119,7 +119,7 @@ L'uso di sottodomini come latex.topology.htb è interessante poiché potrebbero 
 ```shell-session
 $\lstinputlisting{/etc/apache2/sites-available/000-default.conf}$
 ```
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/topology7.webp)
+![](../zzz_rev/attachments/topology7.webp)
 
 Questo mostra quattro host, tutti con email amministratore di vdaisley@topology.htb:
 
@@ -131,10 +131,10 @@ Questo mostra quattro host, tutti con email amministratore di vdaisley@topology.
 aggiungiamoli  al nostro `/etc/hosts`
 
 Visitando `dev.topology.htb` ci richiede delle credenziali che al momento non abbiamo, vediamo se riusciamo ad estrarle tramite LFI 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/topology8.png)
+![](../zzz_rev/attachments/topology8.png)
 
 tipicamente su Apache se la password del sito non è configurata nella configurazione del server, viene configurata tramite un file .htaccess. La lettura di /var/www/dev/.htaccess con il seguente payload `$\lstinputlisting{/var/www/dev/.htaccess}$` restituisce:
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/topology9.webp)
+![](../zzz_rev/attachments/topology9.webp)
 La lettura del file ha esito positivo e rivela che le credenziali si trovano nella stessa posizione, all'interno del file `.htpasswd`, che procediamo a leggere con il payload `$\lstinputlisting{/var/www/dev/.htpasswd}$`
 
 Abbiamo un hash 
