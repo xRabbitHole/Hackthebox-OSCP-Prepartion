@@ -48,7 +48,7 @@ e andiamo a visitare la pagina
 
 # ENUMERATION
 
-![](/Hackthebox-OSCP-Prepartion/zzz_rev/attachments/bizness1.png)
+![](../zzz_rev/attachments/bizness1.png)
 Esplorando il sito non troviamo nulla d'interessante, proviamo ad enumerare le directory con [Dirbserch]
 ```bash
 ┌──(root㉿kali)-[/home/kali]
@@ -102,7 +102,7 @@ Target: https://bizness.htb/
 Abbimao diversi codici 200 andiamo ad analizzarli 
 
 `/control/login`
-![](/Hackthebox-OSCP-Prepartion/zzz_rev/attachments/bizness2.png)
+![](../zzz_rev/attachments/bizness2.png)
 
 Ci troviamo difronte ad un form di login di OFBiz vediamo se troviamo qualche vulnerabilità
 # GAINING AN INITIAL FOOTHOLD
@@ -284,7 +284,7 @@ Quindi è probabile che sia SHA1. Fa riferimento a cryptBytes, una funzione che 
 Richiede un tipo, un salt ,dei bytes e restituisce un hash nel formato $SHA$[stuff]$[stuff], che è lo stesso formato del mio hash.
 
 Se guardo l'ultima sezione del mio hash, è codificata base64
-![](/Hackthebox-OSCP-Prepartion/zzz_rev/attachments/bizness3.webp)
+![](../zzz_rev/attachments/bizness3.webp)
 
 quindi se `uP0_QaVBpDWFeo8-dRzDqRwXQ2I` è lo SHA1 codificato base64, lasciamo "d" come salt. hashcat prende il formato hash:salt, che posso inserire in un file:
 
