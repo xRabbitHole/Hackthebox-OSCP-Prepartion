@@ -110,7 +110,7 @@ Abbiamo un 2 porte aperte
 - 5000/tcp  
 
 Visitiamo 10.10.11.9:5000
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/haedless.png)
+![](../zzz_rev/attachments/haedless.png)
 nel frattempo utilizziamo [Gobuster](Note/Tool/Gobuster.md) per enumerare le directory
 
 ```shell-session
@@ -135,7 +135,7 @@ Starting gobuster in directory enumeration mode
 ```
 
 Troviamo `/support` e `dashboard`
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/Haedless1.png)
+![](../zzz_rev/attachments/Haedless1.png)
 
 Ho cercato online come rubare i cookie usando XSS e ho trovato [questa pagina](https://pswalia2u.medium.com/exploiting-xss-stealing-cookies-csrf-2325ec03136e) dove vedo quanto segue: 
 >- Cookie Stealing
@@ -172,7 +172,7 @@ is_admin=ImFkbWluIg.dmzDkZNEm6CK0oyL1fbM-SnXpH0
 Visitiamo la pagina `dashboard` sostituendo il valore del cookie.
 Abbiamo cosi acceso alla dashboard dell'admin
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/haedless3.png)
+![](../zzz_rev/attachments/haedless3.png)
 
 Da qui dobbiamo valutare quali opzioni abbiamo. Sembra che il campo della data richieda l'input dell'utente, che è dove di solito mi piace guardare. Ora che siamo dietro una pagina protetta possiamo provare a procurarci una shell? Proviamoci. Creo un file chiamato payload.sh con quanto segue al suo interno.
 
@@ -199,7 +199,7 @@ listening on [any] 1111 ...
 ```
 
 Torna su /dashboard e premiamo "Genera report" e catturiamo la richiesta con Burp. Vogliamo inserire un comando che recupererà il file payload che abbiamo creato e lo eseguirà. Assicurandoci di avere il cookie di amministrazione elencato nel campo dei cookie.
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/haedless4.png)
+![](../zzz_rev/attachments/haedless4.png)
 
 il payload viene scaricato 
 
