@@ -393,7 +393,7 @@ d-r---        9/15/2018  12:19 AM                Videos
 
 Non ci resta che eseguirlo per vedere se la nostra teoria è corretta
 
-La sintassi di base è `.\RunasCs.exe <nome_utente> <password> <cmd> 
+La sintassi di base è .\RunasCs.exe <nome_utente> <password> <cmd> 
 
 ```shell-session
 PS C:\Users\Public> .\RunasCs.exe Administrator s67u84zKq8IXw "cmd /c whoami"
