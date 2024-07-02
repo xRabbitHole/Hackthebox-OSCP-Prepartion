@@ -69,7 +69,7 @@ Quindi ricapitolando abbiamo 2 porte aperte
 ## Port 80
 
 Una volta aggiunto `crafty.htb` al nostro `/etc/host` visitiamo http://crafty.htb
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/crafty.png)
+![](../zzz_rev/attachments/crafty.png)
 Il server web ospita un sito web di un server Minecraft, con collegamenti a negozi, forum e votazioni, che arriveranno presto. Non c'è nient'altro da enumerare qui, quindi diamo un'occhiata alla
 ## Port 25565 
 
@@ -321,7 +321,7 @@ copy playercounter-1.0-SNAPSHOT.jar \\10.10.14.15\share\
 
 Ora che abbiamo un file jar valido possiamo utilizzare un decompilatore online come [questo](http://www.javadecompilers.com) per decompilare il plugin nel codice sorgente.
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/crafty2.png)
+![](../zzz_rev/attachments/crafty2.png)
 
 rkon è una libreria pubblica per il protocollo Source RCON, progettata per server di gioco. Dai documenti:
 
@@ -329,7 +329,7 @@ rkon è una libreria pubblica per il protocollo Source RCON, progettata per serv
 
 Il file Playercounter.class ha la parte principale del plugin:
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/crafty1.png)
+![](../zzz_rev/attachments/crafty1.png)
 ```java
     package htb.crafty.playercounter;
 
