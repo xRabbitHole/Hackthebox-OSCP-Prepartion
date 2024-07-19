@@ -41,11 +41,11 @@ Visitando l'indirizzo `10.10.11.18:80` ci troviamo davanti a un form di login co
 - Register (http://usage.htb/registration) dove ci chiede una classica registrazione
 - Admin (http://admin.usage.htb) form di accesso per l'utente adim
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/usage.png)
+![](../zzz_rev/attachments/usage.png)
 
 nella pagina `/login` abbiamo anche un link ad un rest password che rimanda a questa pagina 
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/usage2.png)
+![](../zzz_rev/attachments/usage2.png)
 Dopo diversi tentativi proviamo ad utilizzare [Sqlmap](Note/Tool/Sqlmap.md) per vedere se troviamo qualche SQLinjection nell pagina `/http://usage.htb/forget-password`.
 
 Intercettiamo la richiesta con [Burp Suite](Note/Tool/Burp%20Suite.md) ci salviamo la richiesta e la diamo un pasto a [Sqlmap](Note/Tool/Sqlmap.md). 
@@ -117,7 +117,7 @@ Session completed.
 
 Bene ora che abbiamo una password proviamo a loggarci sulla pagina `admin.usage.htb`
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/usage3.png)
+![](../zzz_rev/attachments/usage3.png)
 
 # GAINING AN INITIAL FOOTHOLD
 
@@ -143,10 +143,10 @@ listening on [any] 443 ...
 ```
 
 Carichiamo il nostro payload nella pagina e intercettiamo la richiesta con [Burp Suite](Note/Tool/Burp%20Suite.md)
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/usage4.png)
+![](../zzz_rev/attachments/usage4.png)
  modifichiamo l'estensione del file aggiungendo `.php`
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/usage5.png)
+![](../zzz_rev/attachments/usage5.png)
 procediamo con il validare la richiesta e otteniamo la nostra shell
 
 ```bash
