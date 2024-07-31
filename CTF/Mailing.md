@@ -72,10 +72,10 @@ Uno scan su tutte le porte non ci da ulteriori informazioni.
 # ENUMERATION
 
 Visitano l'indirizzo alla porta 80 abbiamo conferma di quanto detto prima
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/mailing.png)
+![](../zzz_rev/attachments/mailing.png)
 
 il pulsante in basso installation ci da scaricare un file pdf con le istruzione su come installare il tutto sia ambiente Windows che Linux
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/mailing2.png)
+![](../zzz_rev/attachments/mailing2.png)
 
 Nel frattempo avviamo anche dirsearch per vedere di enumerare le directory
 
@@ -102,12 +102,12 @@ Target: http://mailing.htb/
 
 ci trova `/download.php` che sembra interessante. 
 Se lo visitiamo ci ritorna che non abbiamo specificato alcun file da scaricare 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/mailing3.png)
+![](../zzz_rev/attachments/mailing3.png)
 Proviamo ad intercettare il traffico con [BurpSuite](BurpSuite) per vedere cosa succede.
 
 in questo [post](https://www.hmailserver.com/forum/viewtopic.php?t=31490) troviamo il percorso alla quale dovrebbero essere salvata la passaword dell'amministratore
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/mailing4.png)
+![](../zzz_rev/attachments/mailing4.png)
 
 Bene abbiamo una password ma sembra non essere in chiaro sembra essere un hash proviamo a romperlo con [Hashcat](Note/Tool/Hashcat.md)
 
