@@ -38,7 +38,7 @@ Troviamo 3 porte aperte:
   
 Visitando la porta 80, ci viene presentata una pagina che menziona un sistema di autenticazione basato su API. Facendo clic sull'opzione Live Demo in alto a destra nella pagina si accede a `/api` ma viene visualizzato un errore 404. Un'altra opzione interessante si trova in fondo alla pagina dell'indice. Lì abbiamo la possibilità di scaricare il codice sorgente dell'API.
 
-![](..zzz_rev/attachments/secret.png)
+![](../zzz_rev/attachments/secret.png)
 
 Estraendo l'archivio scaricato, possiamo vedere che in realtà si tratta di un repository git per la presenza della directory .git.
 Poiché è inclusa una directory `.git`, possiamo controllare i log per scoprire quali modifiche sono state apportate al codice che potrebbero darci un suggerimento su dove cercare di andare avanti.
