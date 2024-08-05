@@ -1,20 +1,23 @@
 #!/bin/bash
 
-# Verifica se è stato fornito un argomento
-if [ -z "$1" ]; then
-  echo "Errore: è necessario fornire il nome del file come argomento."
-  echo "Uso: $0 nome_del_file.md"
+# Verifica se sono stati forniti argomenti
+if [ $# -eq 0 ]; then
+  echo "Errore: è necessario fornire almeno un nome di file come argomento."
+  echo "Uso: $0 file1.md file2.md ..."
   exit 1
 fi
 
-# Assegna l'argomento a una variabile
-FILE_NAME=$1
+# Crea una stringa con i nomi dei file separati da virgola per il messaggio di commit
+FILES=""
+for FILE in "$@"; do
+  FILES="$FILES $FILE"
+done
 
 # Aggiungi tutti i file cambiati
 git add .
 
-# Commit con il messaggio che include il nome del file
-git commit -m "$FILE_NAME aggiunto"
+# Commit con il messaggio che include i nomi dei file
+git commit -m "Aggiunti file: $FILES"
 
 # Effettua il pull con rebase
 git pull --rebase origin main
@@ -23,3 +26,4 @@ git pull --rebase origin main
 git push origin main
 
 echo "Operazioni git completate con successo."
+
