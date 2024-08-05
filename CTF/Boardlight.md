@@ -36,7 +36,7 @@ un ulteriore scan su tutte le porte non ci da nessuna nuova informazione.
 # ENUMERATION
  
 Visitiamo la porta 80 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/boardlight.png)Sembra un sito di un azienda di cybersecurity. 
+![](../zzz_rev/attachments/boardlight.png)Sembra un sito di un azienda di cybersecurity. 
 Abbiamo diverse pagine
 
 - `/index.php`
@@ -86,10 +86,10 @@ crm                     [Status: 200, Size: 6360, Words: 397, Lines: 150, Durati
 troviamo un `crm` che andremo ad aggiungere sempre al nostro `etc/hosts`.
 
 Visitando il nuovo indirizzo ci troviamo davanti ad un form di login 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/boardlight2.png)
+![](../zzz_rev/attachments/boardlight2.png)
 
 provando delle credenziali standard come `admin/admin` riusciamo ad effettuare il login anche se riceviamo questo errore
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/boardlight3.png)
+![](../zzz_rev/attachments/boardlight3.png)
 Ora cerando in rete troviamo [questo exploit](https://github.com/dollarboysushil/Dolibarr-17.0.0-Exploit-CVE-2023-30253.git) dove nella sezione manuale riusciamo ad eseguire codice php.E' interessante notare come in prima battuta sembrerebbe che non siamo in grado di aggiungere tale codice ma cambiamo semplicemente il formato con cui viene scritta la parola php (php -> pHp) riusciamo ad evadere i filtri ed ad ottenere l'esecuzione del codice.
 Viene anche fornito un exploit automatizzato per semplificare il tutto.
 
@@ -181,7 +181,7 @@ larissa@boardlight:~$
 
 Ci carichiamo [LinEPAS.sh](LinEPAS.sh) per darci una mano nella ricerca di una via per aumentare ancora i nostri privilegi e diventare root
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/boardlight4.png)
+![](../zzz_rev/attachments/boardlight4.png)
 
 possiamo trovare qui binari non standard anche con il comando `find`
 
