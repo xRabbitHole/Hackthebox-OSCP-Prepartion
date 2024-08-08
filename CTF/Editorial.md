@@ -44,7 +44,7 @@ un ulteriore scan su tutte le porte non ci da nessuna nuova informazione
 
 Visitando la porta 80 ci troviamo davanti ad un sito di un editore per la pubblicazione di libri 
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/editorial.png)
+![](../zzz_rev/attachments/editorial.png)
 
 nella sezione `Publish whit us` che fa riferimento alla pagina `/upload` abbiamo un form dove è possibile caricare dei file potrebbe essere un vettore d'attacco per una SSFR
 
@@ -53,20 +53,20 @@ nella sezione `Publish whit us` che fa riferimento alla pagina `/upload` abbiamo
   >  
 >2. **Come funziona?** Immagina che un server web possa ricevere una URL come input e fare una richiesta HTTP a quell'URL. Se questo input non è adeguatamente controllato, un attaccante può inserire un URL malevolo.
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/editorial2.png)Proviamo per questa via aprendo [BurpSuite](BurpSuite) intercettiamo una richiesta
+![](../zzz_rev/attachments/editorial2.png)Proviamo per questa via aprendo [BurpSuite](BurpSuite) intercettiamo una richiesta
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/editorial3.png)come possiamo vedere abbiamo la directory di dove vengono salvate le immagini `/static/images`
+![](../zzz_rev/attachments/editorial3.png)come possiamo vedere abbiamo la directory di dove vengono salvate le immagini `/static/images`
 Ora quello che possiamo fare e vedere se abbiamo altre porte in locare aperte dove potremmo trovare altre directory dove vengo salvati elementi  e per farlo possiamo utilizzare l'opzione `intruder` di burp
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/editorial4.png)
+![](../zzz_rev/attachments/editorial4.png)
 
 impostiamo il payload come da immagine, ovvero testando tutte le porte incrementando di uno da ogni richiesta, quello che ci aspettiamo sarà un riposta diversa in termini di "peso" che starà ad indicare un riposta diversa da una porta chiusa.
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/editorial5.png)
+![](../zzz_rev/attachments/editorial5.png)
 
 Come possiamo vedere, la porta 5000 restituisce risultati diversi. Vediamo la risposta dalla porta 5000.
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/editorial6.png) 
+![](../zzz_rev/attachments/editorial6.png) 
 
 la scarichiamo e lo leggiamo 
 
@@ -128,7 +128,7 @@ proviamo ad effettuare una richiesta ad ogni endponit per vedere se riusciamo a 
 
 L'endpoint `/api/latest/metadata/messages/authors` contiene un messaggio molto interessante.
 
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/editorial9.png)
+![](../zzz_rev/attachments/editorial9.png)
 
 lo scarichiamo e lo leggiamo, è un messaggio di benvenuto con delle credenziali per accedere ad un forum interno.
 
