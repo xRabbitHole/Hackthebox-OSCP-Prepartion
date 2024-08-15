@@ -55,7 +55,7 @@ un ulteriore scan su tutte le porte non ci porta nessuna nuova informazione
 # ENUMERATION
 
 visitando la porta 80 ci troviamo davanti ad un sito di elearing
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/permx.png)
+![](../zzz_rev/attachments/permx.png)
 
 Sul sito sembra non esserci nulla d'interessante proviamo a cercare se abbiamo qualche VHOST
 
@@ -92,7 +92,7 @@ lms                     [Status: 200, Size: 19347, Words: 4910, Lines: 353, Dura
 Ne troviamo 2 `www` e `lms` che andremo sempre ad aggiungere sempre al nostro `etc/hosts`
 
 Se visitiamo `lms.permx.htb` ci troviamo davanti ad un form di login di Chamilo
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/permx2.png)
+![](../zzz_rev/attachments/permx2.png)
 da notare in basso a destra abbiamo la seguente dicitura `Administrator: Davis Miller`
 potrebbe essere l'amministratore del sito tiamo a mente.
 
@@ -138,7 +138,7 @@ Target: http://lms.permx.htb/
 ```
 
 il file `.travis.yml` sempre interessante proviamo a scaricarlo e vedere cosa contiene.
-![](Hackthebox-OSCP-Prepartion/zzz_rev/attachments/permx3.png)
+![](../zzz_rev/attachments/permx3.png)
 Sembra essere un file di configurazione. che ci fornisce la versione di Chamilio la `1.11.x`
 
 # GAINING AN INITIAL FOOTHOLD 
