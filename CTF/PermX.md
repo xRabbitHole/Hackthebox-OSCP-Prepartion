@@ -413,7 +413,7 @@ mtz ALL=(ALL:ALL) NOPASSWD: /opt/acl.sh
 
 ```
 
-Quello che possiamo vedere è che effettivamente come utenti mtz possiamo eseguire solo `/optc/acl.sh` Ora dato che abbiamo i permessi di scrittura possiamo modificarlo. Quello che andremo a fare è sostituirlo a `NO PASSWD: `il valore `/opt/acl.sh` con `ALL` questo fare ci darà modo di eseguire qualsiasi comando come utente root senza inserire la password  
+Quello che possiamo vedere è che effettivamente come utenti mtz possiamo eseguire solo `/optc/acl.sh`come sudo Ora dato che abbiamo i permessi di scrittura possiamo modificarlo. Quello che andremo a fare è sostituirlo a `NO PASSWD: `il valore `/opt/acl.sh` con `ALL` questo fare ci darà modo di eseguire qualsiasi comando come utente root senza inserire la password  
 
 ```bash
 ```bash
