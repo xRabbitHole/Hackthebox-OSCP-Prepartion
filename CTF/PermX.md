@@ -137,7 +137,7 @@ Target: http://lms.permx.htb/
 [22:18:13] 200 -    4KB - /.travis.yml
 ```
 
-il file `.travis.yml` sempre interessante proviamo a scaricarlo e vedere cosa contiene.
+il file `.travis.yml` sembra interessante proviamo a scaricarlo e vedere cosa contiene.
 ![](../zzz_rev/attachments/permx3.png)
 Sembra essere un file di configurazione. che ci fornisce la versione di Chamilio la `1.11.x`
 
